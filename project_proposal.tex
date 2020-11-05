@@ -4,6 +4,8 @@
 \usepackage{tcolorbox}
 \usepackage{lastpage}
 \usepackage{fancyhdr, accents}
+\usepackage{natbib}
+
 \pagestyle{fancy}
 \setlength{\headheight}{40pt}
 
@@ -43,7 +45,13 @@
 \begin{enumerate}
 \item \section*{Part 1}
 
+There are 2 main types of citations: text \citet{But20} and Parenthetical \citep{Bra20}.
 
+command citet \citet{Mar20} is the same as \cite{Mel93}.
+
+
+\bibliography{references}
+\bibliographystyle{apalike}
 
 \begin{solution}
 
@@ -118,6 +126,7 @@ The input/output model will use while loops and input prompts to keep the progra
 \newpage
 
  \end{enumerate}
+
 
 \end{document}
 
