@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage[margin=1in]{geometry} 
+\usepackage[margin=1in]{geometry}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{tcolorbox}
 \usepackage{lastpage}
@@ -8,12 +8,6 @@
 
 \pagestyle{fancy}
 \setlength{\headheight}{40pt}
-
-\newenvironment{solution}
-  {\renewcommand\qedsymbol{$\blacksquare$}
-  \begin{proof}[Solution]}
-  {\end{proof}}
-\renewcommand\qedsymbol{$\blacksquare$}
 
 \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
 
@@ -38,69 +32,49 @@
 
 \newpage
 
-\lhead{Ching Chang, Letian Cheng \\ Arkaprava Choudhury, Hanrui Fan} 
-\rhead{CSC110Y1-F Fall 2020 \\ Fundamentals of Computer Science 1 \\ Course Project Proposal} 
+\lhead{Ching Chang, Letian Cheng \\ Arkaprava Choudhury, Hanrui Fan}
+\rhead{CSC110Y1-F Fall 2020 \\ Fundamentals of Computer Science 1 \\ Course Project Proposal}
 \cfoot{\thepage\ of \pageref{LastPage}}
 
 \begin{enumerate}
 \item \section*{Part 1}
 
-There are 2 main types of citations: text \citet{But20} and Parenthetical \citep{Bra20}.
-
-command citet \citet{Mar20} is the same as \cite{Mel93}.
-
-
-\bibliography{references}
-\bibliographystyle{apalike}
-
-\begin{solution}
-
-\end{solution}
-
 \newpage
 
 \item \section*{Part 2}
 
-\begin{itemize}
-  \item Give an overview of any background knowledge necessary for the reader to understand the problem you are studying.
-  \item Provide context for the problem and motivate why you have chosen your research question.
-  \item Your research question should be in \emph{bold}; it should be fairly concise, but can be more than one sentence.
-\end{itemize}
+\begin{text}
+Research Question: \textbf{To what extent do the changes in the Amazon rainforest’s area affect the local annual precipitation and air quality?}
 
-\begin{solution}
-
-\end{solution}
+During our initial research of topics related to climate change, we found that the South American rainforest contributes 20\% \citep{Tho20} of the oxygen produced by photosynthesis on land, 
+while the Amazon rainforest is responsible for 10\% of the current greenhouse gas emissions \citep{Mel93}. 
+This information was surprising to us since 20\% of photosynthesis implies a lot of conversion from carbon dioxide, 
+which is a greenhouse gas, to oxygen, whereas the 10\% contribution to greenhouse gas seems to contradict that information. 
+Due to this contradiction, we were curious about whether tree populations actually help control the climate. 
+After some research, we learned that the effect of trees on climate change is more complex than we originally thought. 
+There are many factors to consider, such as the carbon dioxide to oxygen conversion, the tendency to trap heat due to their dark color, 
+reaction to form methane and ozone, and political movements revolving tree plantations \citep{Mar20}. 
+This led us into choosing an empirical approach —we wanted to directly observe the relationship between the change of tree population and climate change. 
+We chose to focus our data on the Amazon rainforest not only because it is the largest rainforest on Earth \citep{WWF13}, 
+but also because there have been several pieces of evidence that show that the Amazon rainforest has been suffering from deforestation recently. 
+For example, over 700,000 km2 (270,000 mi2) of Amazon rainforest had been lost since 1970, reducing its size to 80.7\% of its original size, in 2018 \citep{But20}; 
+There have been more than 40,000 fires in the rainforest in 2019 \citep{Gov20}; and that forest exploitation in Amazon has risen for 14 consecutive months in June 2020 \citep{Reu20}. 
+With these major evidence of deforestation correlating to the change in global and local climate, we believe that it is a relevant topic to contemporary society that should not be ignored.
+\end{text}
 
 \newpage
 
 \item \section*{Part 3}
 
-\begin{itemize}
-    \item State the source (e.g., government/organization website) and format (e.g., text, csv, json, image) of the dataset, and give some sample data contained inside that dataset.
-    \item Don’t be afraid to cobble together your own dataset, such as creating a collection of images that are related. Or to combine two datasets from different sources.
-    \item You will also submit a small sample of your dataset to MarkUs along with your project proposal document. (See more below)
-\end{itemize}
+\begin{text}
 
-\begin{solution}
-
-\end{solution}
+\end{text}
 
 \newpage
 
 \item \section*{Part 4}
 
-\begin{itemize}
-    \item Describe the kinds of computations you plan to perform, such as: data transformation/filtering/aggregation, computational models, and/or algorithms.
-    \item Explain how your program will report the results of your computation in a visual and/or interactive way. You don’t need to go into a lot of details here, but it should be clear what you plan to do.
-\end{itemize}
-
-\textbf{Technical requirement:} for your project, you must use at least one Python library/module that we have not covered in this course, \emph{or} use \underline{plotly} or \underline{pygame} to a much larger extent than what what have given you so far in this course. (See examples and note in the next section).
-
-\begin{itemize}
-    \item In this part of your proposal, you should also describe one new library you intend to use, how you will use it, and why it is appropriate. Refer to specific functions, data types, and/or capabilities of the library that make it relevant for solving the problem you wish to solve.
-\end{itemize}
-
-\begin{solution}\
+\begin{text}
 
 We first create a function that parses the \texttt{html} element of the stats on the website as a string, and converts it to a \texttt{nested array} so that it’s easier to work with. This will involve using a \texttt{for loop}, \texttt{if statements}, and an \texttt{accumulator} keeping track of the data parsed so far. Using this function, we will collect our data for deforestation in the Amazon rain-forest over the past few decades. With the data now converted into a form that we can easily manipulate, we shall focus on analysing the data using our own functions.
 
@@ -112,21 +86,21 @@ Firstly, we have a function to calculate the perpendicular distance of one point
 
 The first estimate for the polynomial will be trivial, and we will then run the simplex algorithm to minimize the sum of the squares of the perpendiculars using two more helper functions, yielding the polynomial regression model. We now move towards plotting the resulting graph using the matplotlib library.
 
-We also plan to write a function to calculate the coefficient of determination to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable. 
+We also plan to write a function to calculate the coefficient of determination to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable.
 
-In addition to the graph, we plan to create an interactive text-based report of our data, where the user  inputs a value for the independent or dependent variable, and the program will provide the corresponding dependent or independent value, coefficient of determination, or the slope of the tangent at the point, depending on which one the user asks for. The output will be text-based, and will require string concatenation, and if statements to check whether to add trivial information to the report. 
+In addition to the graph, we plan to create an interactive text-based report of our data, where the user  inputs a value for the independent or dependent variable, and the program will provide the corresponding dependent or independent value, coefficient of determination, or the slope of the tangent at the point, depending on which one the user asks for. The output will be text-based, and will require string concatenation, and if statements to check whether to add trivial information to the report.
 
 The input/output model will use while loops and input prompts to keep the program interactive. We also extrapolate the data to yield the predictions about future data using the interactive i/o model. Finally, we use the extrapolated data to summarize the upcoming significant years where the dependent variable will reach a certain milestone.
 
-
-\end{solution}
+\end{text}
 
 \maketitle
 
 \newpage
 
- \end{enumerate}
+\bibliography{references}
+\bibliographystyle{apalike}
 
+\end{enumerate}
 
 \end{document}
-
