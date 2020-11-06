@@ -77,9 +77,9 @@ The data we show here is based on joint estimates by Brazilian National Institut
     At the same time, these data contain four columns including estimated remaining forest cover, average annual forest area loss, percentage of forest cover compared to 1970 area, and total forest area lost since 1970.\\
 
 
-    \emph{sample}:
+    \emph{Sample}:
 
-    source: https://rainforests.mongabay.com/amazon/deforestation\_calculations.html
+    Source: (Mongabay, 2019)
 
 
 
@@ -125,7 +125,7 @@ Firstly, we have a function to calculate the perpendicular distance of one point
 
 The first estimate for the polynomial will be trivial, and we will then run the simplex algorithm to minimize the sum of the squares of the perpendiculars using two more helper functions, yielding the polynomial regression model. We now move towards plotting the resulting graph using the \texttt{matplotlib} library.
 
-We also plan to write a function to calculate the coefficient of determination \texttt{r_2} to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable.
+We also plan to write a function to calculate the coefficient of determination \texttt{$r_2$} to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable.
 
 In addition to the graph, we plan to create an interactive text-based report of our data, where the user inputs a value for the independent or dependent variable, and the program will provide the corresponding dependent or independent value, coefficient of determination, or the slope of the tangent at the point, depending on which one the user asks for. The output will be text-based, and will require string concatenation, and if statements to check whether to add trivial information to the report.
 
@@ -140,7 +140,7 @@ The Annual total $CO_2$ emissions dataset we have is a CSV file. In order to par
 Pandas is a python library written for data manipulation and analysis.
 In particular, it offers data structures and operations for manipulating numerical tables and time series.
 
-Specific, we will use the function ``read\_csv". This function have many parameters available for us, but we will only use ``filepath\_or\_buffer" parameter.
+Specific, we will use the function "read\_csv". This function have many parameters available for us, but we will only use "filepath\_or\_buffer" parameter.
 It takes a valid string path, which is the path to our CSV file.
 
 This function will return a class - Pandas DataFrame that contains the data of the CSV file. Pandas DataFrame is easier for calculating dataset thanks to its various build in functions.
