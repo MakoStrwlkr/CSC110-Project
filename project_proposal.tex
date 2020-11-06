@@ -5,9 +5,11 @@
 \usepackage{lastpage}
 \usepackage{fancyhdr, accents}
 \usepackage{natbib}
+\usepackage{graphicx}
 
 \pagestyle{fancy}
 \setlength{\headheight}{40pt}
+\graphicspath{ {sources/} }
 
 \newenvironment{solution}
   {\renewcommand\qedsymbol{$\blacksquare$}
@@ -88,6 +90,66 @@ The data we show here is based on joint estimates by Brazilian National Institut
     We then selected data from the start of 1988 because our team considered the absence of the change in deforestation loss data between 1978-1987 to be unrepresentative, so we filtered the 1978-1987 data as well.\\
     At the same time, these data contain four columns including estimated remaining forest cover, average annual forest area loss, percentage of forest cover compared to 1970 area, and total forest area lost since 1970.\\
     
+\begin{itemize}
+  \item 
+  {
+    CO2 data.  https://ourworldindata.org/grapher/annual-co-emissions-by-region
+
+    \begin{tabular}{ |c|c|c| }
+    \hline
+    Entity & Year & Annual CO2 emissions \\
+    \hline
+      South America & 2010 & 1059.075401726349 \\
+      \hline
+      South America & 2011 & 1062.6963727613836 \\
+      \hline
+      South America & 2012 & 1125.3927407850085 \\
+      \hline
+      South America & 2013 & 1166.250041134838 \\
+      \hline
+      South America & 2014 & 1198.3039835470736 \\
+      \hline
+      South America & 2015 & 1170.890808102911 \\
+      \hline
+      South America & 2016 & 1134.3849989543753 \\
+      \hline
+      South America & 2017 & 1125.5205007738507 \\
+      \hline
+      South America & 2018 & 1112.9340357582964 \\
+      \hline
+    \end{tabular}
+ 
+  }
+  \item
+  {
+    precipitation data. https://neo.sci.gsfc.nasa.gov/view.php?datasetId=TRMM\_3B43M
+
+    This is the Global rainfall map in August, 2016. We can extract the exact numbers using colour table provided.
+
+    \includegraphics[scale = 0.6]{Global-rainfall-Aug2016.png}
+
+    here is the colour table: \includegraphics{Global-rainfall-Aug2016-table.png}
+  }
+  \item
+  {
+    Deforestation data. https://rainforests.mongabay.com/amazon/deforestation\_calculations.html
+
+    \begin{tabular}{ |c|c|c|c|c|c| }
+    \hline
+    Period &	Estimated Natural Forest Cover &	Deforestation (INPE) \\
+      \hline
+      2015 & 3,413,662  & 6,207  \\
+      \hline
+      2016 & 3,406,796  & 7,893 \\
+      \hline
+      2017 & 3,399,308  & 6,947 \\
+      \hline
+      2018 & 3,390,835  & 7,900 \\
+      \hline
+    \end{tabular}
+ 
+  }
+\end{itemize}
 
 \textbf{\large 4. A computational plan for your project. (300–500 words)}
 \begin{solution}
