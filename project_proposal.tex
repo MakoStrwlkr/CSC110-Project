@@ -5,9 +5,11 @@
 \usepackage{lastpage}
 \usepackage{fancyhdr, accents}
 \usepackage{natbib}
+\usepackage{graphicx}
 
 \pagestyle{fancy}
 \setlength{\headheight}{40pt}
+\graphicspath{ {sources/} }
 
 \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
 
@@ -68,7 +70,50 @@ With these major evidence of deforestation correlating to the change in global a
 
 \begin{text}
 
-\end{text}
+
+The data we show here is based on joint estimates by Brazilian National Institute of Space Research and the United Nations Food and Agriculture Organization with map data provided by MapBiomas.\\
+    The data is presented as a text-based table, but we will convert it into a csv file. The data shows the area of the Amazon rainforest in Brazil, which accounts for about 60\% of the total area of the country.\\
+    For these data we did some pre-processing, we first removed items in the data that had NA (unrecorded or incomplete data), these included data up to 1985 and 2019, but we needed to record data from pre-1970 as this is the baseline data for the subsequent percentage change.\\
+    We then selected data from the start of 1988 because our team considered the absence of the change in deforestation loss data between 1978-1987 to be unrepresentative, so we filtered the 1978-1987 data as well.\\
+    At the same time, these data contain four columns including estimated remaining forest cover, average annual forest area loss, percentage of forest cover compared to 1970 area, and total forest area lost since 1970.\\
+
+
+    \emph{sample}:
+
+    source: https://rainforests.mongabay.com/amazon/deforestation\_calculations.html
+
+
+
+    \begin{tabular}{ |c|c|c|c|c| }
+    \hline
+    Period &	Estimated Natural Forest Cover &	Deforestation (INPE) \\
+      \hline
+      2016 & 3,406,796  & 7,893 \\
+      \hline
+      2017 & 3,399,308  & 6,947  \\
+      \hline
+      2018 & 3,390,835  & 7,900   \\
+      \hline
+    \end{tabular}
+
+    continue:
+
+    \begin{tabular}{ |c|c|c|c|c| }
+    \hline
+    Period & Forest cover as \% of pre-1970 cover & Total forest loss since 1970  \\
+      \hline
+      2016 &  	83.1\% & 	693,204  \\
+      \hline
+      2017 & 82.9\% &	700,692  \\
+      \hline
+      2018 &  82.7\% &	709,165  \\
+      \hline
+    \end{tabular}
+
+
+\textbf{\large 4. A computational plan for your project. (300–500 words)}
+\begin{solution}
+\end{solution}
 
 \newpage
 
