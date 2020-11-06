@@ -119,6 +119,19 @@ In addition to the graph, we plan to create an interactive text-based report of 
 The input/output model will use while loops and input prompts to keep the program interactive. We also extrapolate the data to yield the predictions about future data using the interactive i/o model. Finally, we use the extrapolated data to summarize the upcoming significant years where the dependent variable will reach a certain milestone.
 
 
+\textbf{Technical requirement:}
+
+The Annual total $CO_2$ emissions dataset we have is a CSV file. In order to parse it easily, We decide to use pandas for CSV file reading.
+
+Pandas is a python library written for data manipulation and analysis. 
+In particular, it offers data structures and operations for manipulating numerical tables and time series.
+
+Specific, we will use the function "read\_csv". This function have many parameters available for us, but we will only use "filepath\_or\_buffer" parameter.
+It takes a valid string path, which is the path to our CSV file.
+
+This function will return a class - Pandas DataFrame that contains the data of the CSV file. Pandas DataFrame is easier for calculating dataset thanks to its various build in functions.
+In this way, we can access each cell of CSV file for our later research.
+
 \end{solution}
 
 \maketitle
