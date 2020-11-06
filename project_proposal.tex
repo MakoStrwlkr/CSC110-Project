@@ -60,7 +60,7 @@ reaction to form methane and ozone, and political movements revolving tree plant
 This led us into choosing an empirical approach —we wanted to directly observe the relationship between the change of tree population and climate change.
 We chose to focus our data on the Amazon rainforest not only because it is the largest rainforest on Earth \citep{WWF13},
 but also because there have been several pieces of evidence that show that the Amazon rainforest has been suffering from deforestation recently.
-For example, over 700,000 km2 (270,000 mi2) of Amazon rainforest had been lost since 1970, reducing its size to 80.7\% of its original size, in 2018 \citep{But20};
+For example, over $700,000 km^2$ ($270,000 mi^2$) of Amazon rainforest had been lost since 1970, reducing its size to 80.7\% of its original size, in 2018 \citep{But20};
 There have been more than 40,000 fires in the rainforest in 2019 \citep{Gov20}; and that forest exploitation in Amazon has risen for 14 consecutive months in June 2020 \citep{Reu20}.
 With these major evidence of deforestation correlating to the change in global and local climate, we believe that it is a relevant topic to contemporary society that should not be ignored.
 \end{text}
@@ -77,9 +77,9 @@ The data we show here is based on joint estimates by Brazilian National Institut
     At the same time, these data contain four columns including estimated remaining forest cover, average annual forest area loss, percentage of forest cover compared to 1970 area, and total forest area lost since 1970.\\
 
 
-    \emph{sample}:
+    \emph{Sample}:
 
-    source: https://rainforests.mongabay.com/amazon/deforestation\_calculations.html
+    Source: \citep{But20}
 
 
 
@@ -123,11 +123,11 @@ We split the mathematical algorithm for this problem using top-down design. Firs
 
 Firstly, we have a function to calculate the perpendicular distance of one point from a given polynomial. As opposed to the naive approach to the problem, we use Newton-Raphson method \textit{repeatedly} to estimate a solution for the derivative of the expression for the difference between the point and the polynomial, hence finding the coordinates of the foot of perpendicular, and consequently, the length of perpendicular.
 
-The first estimate for the polynomial will be trivial, and we will then run the simplex algorithm to minimize the sum of the squares of the perpendiculars using two more helper functions, yielding the polynomial regression model. We now move towards plotting the resulting graph using the matplotlib library.
+The first estimate for the polynomial will be trivial, and we will then run the simplex algorithm to minimize the sum of the squares of the perpendiculars using two more helper functions, yielding the polynomial regression model. We now move towards plotting the resulting graph using the \texttt{matplotlib} library.
 
-We also plan to write a function to calculate the coefficient of determination to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable.
+We also plan to write a function to calculate the coefficient of determination \texttt{$r_2$} to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable.
 
-In addition to the graph, we plan to create an interactive text-based report of our data, where the user  inputs a value for the independent or dependent variable, and the program will provide the corresponding dependent or independent value, coefficient of determination, or the slope of the tangent at the point, depending on which one the user asks for. The output will be text-based, and will require string concatenation, and if statements to check whether to add trivial information to the report.
+In addition to the graph, we plan to create an interactive text-based report of our data, where the user inputs a value for the independent or dependent variable, and the program will provide the corresponding dependent or independent value, coefficient of determination, or the slope of the tangent at the point, depending on which one the user asks for. The output will be text-based, and will require string concatenation, and if statements to check whether to add trivial information to the report.
 
 The input/output model will use while loops and input prompts to keep the program interactive. We also extrapolate the data to yield the predictions about future data using the interactive i/o model. Finally, we use the extrapolated data to summarize the upcoming significant years where the dependent variable will reach a certain milestone.
 
