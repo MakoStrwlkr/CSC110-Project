@@ -117,7 +117,7 @@ The data we show here is based on joint estimates by the Brazilian National Inst
 
 We first create a function that parses the \texttt{html} element of the stats on the website as a string, and converts it to a \texttt{nested array} so that it’s easier to work with. This will involve using a \texttt{for loop}, \texttt{if statements}, and an \texttt{accumulator} keeping track of the data parsed so far. Using this function, we will collect our data for deforestation in the Amazon rain-forest over the past few decades. With the data now converted into a form that we can easily manipulate, we shall focus on analysing the data using our own functions.
 
-For this project, we use smooth polynomial fitting to relate two of the variables in our \texttt{nested list}. Now, although there exist readily available functions that would do the same in the module \texttt{scipy}, we try implementing our own functions for the same, to test our learning from the course.
+For this project, we use smooth polynomial fitting to relate two of the variables in our \texttt{nested list}. Now, although there exist readily available functions that would do the same in the module \texttt{numpy} \citep{Sci20}, we try implementing our own functions for the same, to test our learning from the course.
 
 We split the mathematical algorithm for this problem using top-down design. Firstly, the main function would have two lists, \texttt{l\_x, l\_y}, of same length as input (for the two variables), along with an integer $n$ (where $n \leq \texttt{len(l\_x)}$; representing degree of intended polynomial). The function body would have calls to helper functions. Note: this is only a rough outline and the exact technical details may be changed based on the results after testing the functions.
 
@@ -140,11 +140,10 @@ The Annual total $CO_2$ emissions dataset we have is a CSV file. In order to par
 Pandas is a python library written for data manipulation and analysis.
 In particular, it offers data structures and operations for manipulating numerical tables and time series.
 
-Specific, we will use the function "read\_csv". This function has many parameters available for us, but we will only use "filepath\_or\_buffer" parameter.
+Specific, we will use the function \texttt{read\_csv}". This function has many parameters available for us, but we will only use \texttt{filepath\_or\_buffer} parameter.
 It takes a valid string path, which is the path to our CSV file.
 
-This function will return a class - Pandas DataFrame that contains the data of the CSV file. Pandas DataFrame is easier for calculating dataset thanks to its various built-in functions.
-In this way, we can access each cell of the CSV file for our later research.
+This function will return a class - Pandas DataFrame that contains the data of the CSV file. Pandas DataFrame is easier for calculating dataset thanks to its various built-in functions. This way, we can access each cell of the CSV file for our later research.
 
 \end{text}
 
