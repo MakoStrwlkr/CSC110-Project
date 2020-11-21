@@ -1,0 +1,3 @@
+since Github limit the datasize to 100MB, I'll upload the rainfall data to my server and generate a link for it
+
+http://sudo.fit/3B43_rainfall.zip
