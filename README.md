@@ -1,4 +1,4 @@
-## An interactive report of the effect of Amazon rainforest’s area on the localannual precipitation and CO2emission (with python prime shipping).
+## An interactive report of the effect of Amazon rainforest’s area on the localannual precipitation and CO2 emission (with python prime shipping).
 
 To-do-list:
 - [x] Rainfall data
