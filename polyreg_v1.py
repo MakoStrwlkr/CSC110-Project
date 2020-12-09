@@ -1,11 +1,5 @@
 """CSC110 Fall 2020 Course Project - Prototype version of polynomial regression algorithm.
-
-
-Created by Arkaprava Choudhury,
-in partnership with Ching Chang, Letian Cheng, and Hanrui Fan.
-
-This file may be used freely by members of the team, as per their wish,
-and by course instructors and teaching assistants when grading the project.
+WORK IN PROGRESS. Contains experiment functions.
 """
 from typing import List, Tuple
 import numpy as np
@@ -40,9 +34,6 @@ def candidate_polynomial(points: List[Tuple[float, float]], degree: int) -> List
 def convert_points(points: List[Tuple[float, float]]) -> Tuple[List[float], List[float]]:
     """Return a tuple of two lists, containing the x- and y-coordinates of the given points.
 
-    You may ASSUME that:
-        - points is a list of tuples, where each tuple is a list of floats.
-
     >>> result = convert_points([(0.0, 1.1), (2.2, 3.3), (4.4, 5.5)])
     >>> result[0]  # The x-coordinates
     [0.0, 2.2, 4.4]
@@ -61,15 +52,12 @@ def simple_linear_regression(points: List[Tuple[float, float]]) -> Tuple[float, 
 
     Further reading: https://en.wikipedia.org/wiki/Simple_linear_regression
 
-    You may ASSUME that:
+    Preconditions:
         - len(points) > 0
         - each element of points is a tuple of two floats
 
     >>> simple_linear_regression([(1.0, 1.0), (2.0, 2.0), (3.0, 3.0)])
     (0.0, 1.0)
-
-    Hint: you might want to define a separate function that calculates the average
-    of a collection of numbers.
     """
     # Convert list of points into better format.
     list_of_points = convert_points(points)
