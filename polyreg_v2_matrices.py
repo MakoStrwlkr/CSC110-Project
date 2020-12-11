@@ -38,23 +38,7 @@ def split_coordinates(coordinates: List[Tuple[float, float]]) -> Tuple[List[floa
     return ([x[0] for x in points], [y[1] for y in points])
 
 
-def make_matrix(points: List[float], degree: int) -> List[List[float]]:
-    """Returns a nested list representation of a matrix consisting of the basis
-    elements of the polynomial of degree n, evaluated at each of the points.
 
-    In other words, each row consists of 1, x, x^2, ..., x^n, where n is the degree,
-    and x is a value in points.
-
-    Preconditions:
-      - degree < len(points)
-    """
-    matrix = []
-
-    for point in points:
-        row = [point ** index for index in range(degree + 1)]
-        matrix.append(row)
-
-    return matrix
 
 
 def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
@@ -129,15 +113,77 @@ def find_coefficients(x_data: List[float], y_data: List[float], degree: int) -> 
     """Returns the coefficients of the estimate polynomial that approximates
     the given data.
 
+    The list of estimated coefficients contains the coefficients of 1, x, x^2, ...
+    till x^(degree).
+
+    This list is calculated using the formula:
+    beta = (X^T * X)^(-1) * X^T * y
+    where X represents the matrix of powers of the x values, and y represents a list
+    of the y values.
+
     Preconditions:
       - degree < len(x_data)
     """
+    x_matrix = make_matrix(x_data, degree)
+    y_matrix = [[y] for y in y_data]
+
+    x_transpose = transpose_matrix(x_matrix)
+    multiply = matrix_multiplication_small(x_matrix, x_transpose)
+
+    inv_multiply = matrix_inverse_numpy(multiply)
+    inv_multiply_with_transpose = matrix_multiplication_small(inv_multiply, x_transpose)
+
+    beta = matrix_multiplication_small(inv_multiply_with_transpose, y_matrix)
+
+    return [beta[i][0] for i in range(len(beta))]
 
 
 class Matrix:
-    """A nested list representation of a matrix.
-    Supports matrix transpose, matrix inverse, matrix multiplication
+    """An abstract data class for a nested list representation of a matrix.
+    All subclasses support matrix transpose, matrix inverse, matrix multiplication.
 
     Public Instance Attributes:
       - matrix: nested list representation of a matrix.
     """
+
+    ...
+
+
+class XMatrix(Matrix):
+    """Matrix for storing the powers of x.
+
+    Public instance attributes:
+      - matrix: nested list representation of a matrix
+    """
+    matrix: List[List[float]]
+
+    def __init__(self, points: List[float], degree: int) -> None:
+        """Returns a nested list representation of a matrix consisting of the basis
+        elements of the polynomial of degree n, evaluated at each of the points.
+
+        In other words, each row consists of 1, x, x^2, ..., x^n, where n is the degree,
+        and x is a value in points.
+
+        Preconditions:
+          - degree < len(points)
+        """
+        self.matrix = make_matrix(points, degree)
+
+
+def make_matrix(points: List[float], degree: int) -> List[List[float]]:
+    """Returns a nested list representation of a matrix consisting of the basis
+    elements of the polynomial of degree n, evaluated at each of the points.
+
+    In other words, each row consists of 1, x, x^2, ..., x^n, where n is the degree,
+    and x is a value in points.
+
+    Preconditions:
+      - degree < len(points)
+    """
+    matrix = []
+
+    for point in points:
+        row = [point ** index for index in range(degree + 1)]
+        matrix.append(row)
+
+    return matrix
