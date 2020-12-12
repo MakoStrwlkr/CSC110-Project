@@ -6,67 +6,12 @@ import csv
 import os
 from typing import Any, List, Tuple
 import datetime
+from getdata import Climate
 
-
-
-class Climate:
-    """A class that save all of the precipitation data by longitude and latitude
-
-        Public Attributes:
-            - name: the name of this Climate dataset
-            - date: a datetime object record date
-            - stored_data: the precipitation/co2emission data for given time
-            - data: a list of float corresponding to area added
-            - average: a float represent the average of precipitation in the area
-            - max: a float represent the max of precipitation/co2 in the area
-            - min: a float represent the min of precipitation/co2 in the area
-
-        Representation Invariants:
-            - self.name != ''
-    """
-    name: str
-    date: datetime.date
-    stored_data: Any
-    area_data: List[float]
-    average: float
-    max: float
-    min: float
-
-    def __init__(self, name: str, date: datetime.date, stored_data: Any) -> None:
-        """Initialize a new precipitation dataset
-
-        The dataset starts with no data
-        """
-        self.name = name
-        self.date = date
-        self.stored_data = stored_data
-        self.area_data = []
-        self.average = 0.0
-        self.max = 0.0
-        self.min = 0.0
-
-    def add_area(self, location: Any) -> None:
-        """Add the area that needed to be examined.
-
-        """
-        raise NotImplementedError
-
-    def renew_property(self) -> None:
-        """Renew max, min and average of data
-
-        """
-        import statistics
-        self.max = max(self.area_data)
-        self.min = min(self.area_data)
-        self.average = statistics.mean(self.area_data)
 
 class Co2emission(Climate):
-    """A class that save all of the precipitation data by longitude and latitude
-
-        Private Attributes:
-            - area: a list of string contains country
+    """A class that save all of the precipitation data
     """
-    _area: List[str]
 
     def __init__(self, name: str, date: datetime.date, stored_data: Any) -> None:
         """Initialize a new co2 dataset

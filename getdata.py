@@ -13,10 +13,10 @@ class Climate:
             - 1986 <= self.years <= 2018
     """
     name: str
-    years: int
+    year: int
     value: float
 
-    def __init__(self, name: str, years: int, value: float) -> None:
+    def __init__(self, name: str, year: int, value: float) -> None:
         self.name = name
-        self.years = years
+        self.year = year
         self.value = value
