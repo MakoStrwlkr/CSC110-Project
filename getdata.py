@@ -33,10 +33,24 @@ def co2_read_csv(filepath: str, country: str) -> Any:
         reader = csv.DictReader(csvfile, delimiter=',')
         for row in reader:
             if row["Entity"] == country:
-                climate = Climate(name=country, year=row["Year"], value=row["Annual CO2 emissions"])
+                climate = Climate(name="Annual CO2 emissions of " + country,\
+                     year=row["Year"], value=row["Annual CO2 emissions"])
                 res.append(climate)
 
     return res
+
+def deforestation_read_csv(filepath: str, row_name: str) -> Any:
+    """read deforestation from given csv file
+    """
+    res = list()
+    with open(filepath, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter='\t')
+        for row in reader:
+            climate = Climate(name=row_name, year=row["Period"], value=row["Estimated Natural Forest Cover"])
+            res.append(climate)
+
+    return res
+
 
 def getdata() -> Any:
     """use this function to fetch all the data needed.
