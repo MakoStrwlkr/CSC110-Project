@@ -10,7 +10,13 @@ class Climate:
 
         Representation Invariants:
             - self.name != ''
+            - 1986 <= self.years <= 2018
     """
     name: str
     years: int
     value: float
+
+    def __init__(self, name: str, years: int, value: float) -> None:
+        self.name = name
+        self.years = years
+        self.value = value
