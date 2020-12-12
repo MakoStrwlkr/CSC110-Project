@@ -137,3 +137,5 @@ if __name__ == '__main__':
     temp2.add_area('Colombia')
     temp2.add_area('NoCountryHere')
     temp2.add_area('Brazil')
+    print(temp2._area[0])
+    print(dataset2[55].area_data[0])
