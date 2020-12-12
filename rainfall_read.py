@@ -143,9 +143,3 @@ if __name__ == '__main__':
     temp1.add_area((50, -179.49))
     temp1.add_area((50, -179.76))
     dataset1 = read_each_file('3B43_rainfall', 'precipitation')
-    dataset2 = read_each_file('annual-co-emissions-by-region', 'co2emission')
-    temp2 = dataset2[55]  # 2004-12-31 co2 emission
-    temp2.add_area('Brazil')
-    temp2.add_area('Colombia')
-    temp2.add_area('NoCountryHere')
-    temp2.add_area('Brazil')
