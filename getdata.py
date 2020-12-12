@@ -1,3 +1,4 @@
+from ast import NodeTransformer
 import numpy as np
 from pyhdf.SD import SD, SDC
 import csv
@@ -127,8 +128,9 @@ def deforestation_read_csv(filepath: str, row_name: str) -> Any:
     return res
 
 
-def getdata() -> Any:
+def getdata() -> List:
     """use this function to fetch all the data needed.
+    res is a list contains Climate class.
     """
     res = list()
 
@@ -140,7 +142,31 @@ def getdata() -> Any:
 
     return res
 
+def save_data_as_csv(data: list, filename: str) -> None:
+    """save the data from getdata() as csv.
+    """
+    with open(filename, 'w', newline='') as csvfile:
+        fieldnames = ["name", "year", "value"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for i in data:
+            writer.writerow({"name": i.name, "year": i.year, "value": i.value})
+
+def read_data_from_csv(filename: str) -> Any:
+    """read the data from saved csv
+    """
+    res = list()
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter='\t')
+        for row in reader:
+            climate = Climate(name=row["name"], year=row["year"], value=row["value"])
+            res.append(climate)
+
+    return res
+
 if __name__ == '__main__':
     temp1 = Precipitation('AmazonPrecipitation20040201', 2004, None)
     temp1.add_area((50, -180), '3B43_rainfall')
     temp1.add_area((50, -179.75), '3B43_rainfall')
+    save_data_as_csv(getdata(), "version1.csv")
