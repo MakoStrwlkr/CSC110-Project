@@ -35,6 +35,9 @@ def split_coordinates(coordinates: List[Tuple[float, float]]) -> Tuple[List[floa
 
     Preconditions:
       - coordinates != []
+
+    >>> split_coordinates([(1, 1), (2, 4), (3, 9)])
+    ([1, 2, 3], [1, 4, 9])
     """
     points = sorted(coordinates)
     return ([x[0] for x in points], [y[1] for y in points])
@@ -50,7 +53,11 @@ def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
     Note: will work for only real inputs, so cannot extend this to
     complex polynomials.
 
-    Matrix must be in the form returned by make_matrix.
+    Preconditions:
+      - matrix must be in the form returned by make_matrix.
+
+    >>> transpose_matrix([[1, 1, 1], [1, 2, 4], [1, 3, 9]])
+    [[1, 1, 1], [1, 2, 3], [1, 4, 9]]
     """
     transpose = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
 
@@ -123,8 +130,6 @@ def matrix_inverse_numpy(matrix: List[List[float]]) -> Any:
     # Since I could not find any efficient algorithm for finding the inverse
     # of a matrix, I used numpy, and a data class in numpy called array to
     # optimize the process.
-    # I will keep trying to build an efficient self-written code in the next
-    # two days, and add what I get to this file.
     matrix_inv_numpy = np.linalg.inv(matrix)
     return matrix_inv_numpy.tolist()
 
@@ -216,6 +221,9 @@ def make_matrix(points: List[float], degree: int) -> List[List[float]]:
 
     Preconditions:
       - degree < len(points)
+
+    >>> make_matrix([1, 2, 3], 2)
+    [[1, 1, 1], [1, 2, 4], [1, 3, 9]]
     """
     matrix = []
 
@@ -292,17 +300,24 @@ class PolynomialRegression:
         return evaluation
 
     def plotter(self) -> None:
-        """Sample plotter. Don't use this."""
+        """Sample plotter. Please modify this."""
         x = np.linspace(0.5 * min(self.x_values), 1.25 * max(self.x_values),
                         100, endpoint=True)
         f = self(x)
         plt.plot(x, f)
 
+        plt.scatter(self.x_values, self.y_values)
+
+        plt.tight_layout()
+
         plt.show()
 
     def extreme_absolute_error(self) -> Dict[str, float]:
         """Return a dictionary of minimum absolute error: value
-        and maximum absolute error: value
+        and maximum absolute error: value.
+
+        Preconditions:
+          - self.coefficients != []
         """
         return {'min error': min(self.error_values), 'max error': max(self.error_values)}
 
@@ -336,13 +351,26 @@ class PolynomialRegression:
         return numerator / denominator
 
 
+############################################################################################
+# Some functions to help with error calculations.
+############################################################################################
+
+
 def expected_value(values: List[float]) -> float:
-    """Return the expected value of the input list"""
+    """Return the expected value of the input list
+
+    >>> expected_value([1, 2, 3])
+    2.0
+    """
     return sum(values) / len(values)
 
 
 def standard_deviation(values: List[float]) -> float:
-    """Return the standard deviation of the input list"""
+    """Return the standard deviation of the input list
+
+    >>> standard_deviation([1, 1, 1])
+    0
+    """
     mean_val = expected_value(values)
     sum_of_squares = sum([(val - mean_val) ** 2 for val in values])
     return math.sqrt(sum_of_squares / (len(values) - 1))
