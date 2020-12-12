@@ -60,38 +60,6 @@ class Climate:
         self.average = statistics.mean(self.area_data)
 
 
-class Co2emission(Climate):
-    """A class that save all of the precipitation data by longitude and latitude
-
-        Private Attributes:
-            - area: a list of string contains country
-    """
-    _area: List[str]
-
-    def __init__(self, name: str, date: datetime.date, stored_data: Any) -> None:
-        """Initialize a new co2 dataset
-
-        The dataset starts with no data
-        """
-        Climate.__init__(self, name, date, stored_data)
-        self._area = []
-
-    def add_area(self, location: str) -> None:
-        """Add the given location(str) as a country
-
-        Representation Invariants:
-            - location in self.stored_data
-
-        """
-        if location.lower() not in self._area and location.lower() in self.stored_data:
-            self.area_data.append(self.stored_data[location.lower()])
-            self._area.append(location.lower())
-            print(location + ' added.')
-            self.renew_property()
-        else:
-            print(location + ' already exists.')
-
-
 class Precipitation(Climate):
     """A class that save all of the precipitation data by longitude and latitude
 
@@ -154,9 +122,6 @@ def read_each_file(filepath: str, file_class: str) -> list:
             data_base.append(Precipitation('Precipitation' + date,
                                           datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:8])),
                                           read_hdf(new_dir, file_class.lower())))
-        elif os.path.isfile(new_dir)\
-                and os.path.splitext(new_dir)[1].lower() == ".csv":
-            data_base = read_csv(new_dir, file_class)
 
     return data_base
 
@@ -168,31 +133,6 @@ def read_hdf(filepath: str, file_class: str) -> Any:
     if file_class == 'precipitation':
         precipitation_dataset = np.transpose(SD(filepath, SDC.READ).select('precipitation')[:])
         return precipitation_dataset
-
-
-def read_csv(filepath: str, file_class: str) -> Any:
-    """Read CSV File by file_class with update compatibility if there are multiple file_class
-
-    """
-    if file_class == 'co2emission':
-        database = {}
-        co2_year = []
-        with open(filepath) as file:
-            reader = csv.reader(file)
-            next(reader)
-            # Form self.data
-            for row in reader:
-                if row[1] != '' and row[3] != '0' and row[2] not in database:
-                    database[row[2]] = {row[0].lower(): float(row[3])}
-                elif row[1] != '' and row[3] != '0':
-                    database[row[2]][row[0].lower()] = float(row[3])
-            # Form Co2emission
-            for year in database:
-                co2_year.append(Co2emission('Co2emission' + year,
-                                            datetime.date(int(year), 12, 31),
-                                            database[year]))
-        return co2_year
-
 
 
 if __name__ == '__main__':
