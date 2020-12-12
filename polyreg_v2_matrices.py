@@ -5,12 +5,6 @@ the ordinary least squares estimator.
 Written by Arkaprava Choudhury,
 In partnership with Ching Chang, Letian Cheng, and Hanrui Fan.
 
-In contrast to v1, where the program used lists to represent polynomials,
-this program uses a different approach to finding the polynomial regression model.
-
-The sole limitation of this model lies in calculating the errors; the complexity of
-the calculations involved increases with this approach as the number of calculations changes.
-
 All work presented here written by Arkaprava Choudhury, et. al, and no piece of code has been
 referenced from any sources on the Internet. The authors reserve all rights to replicate this
 work, and no one, apart from the graders of this project and the instructors of CSC110 can
@@ -21,7 +15,7 @@ This file is Copyright (c) by Ching Chang, Letian Cheng, Arkaprava Choudhury, an
 
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List, Tuple, Any, Dict
+from typing import List, Any, Dict
 import math
 
 
@@ -30,17 +24,19 @@ import math
 # takes in a list of co-ordinates and splits them up.
 ############################################################################################
 
-def split_coordinates(coordinates: List[Tuple[float, float]]) -> Tuple[List[float], List[float]]:
-    """Return a tuple of the x-values and y-values.
 
-    Preconditions:
-      - coordinates != []
-
-    >>> split_coordinates([(1, 1), (2, 4), (3, 9)])
-    ([1, 2, 3], [1, 4, 9])
-    """
-    points = sorted(coordinates)
-    return ([x[0] for x in points], [y[1] for y in points])
+# We changed the way the PolynomialRegression class initializes values so we didn't use this.
+# def split_coordinates(coordinates: List[Tuple[float, float]]) -> Tuple[List[float], List[float]]:
+#     """Return a tuple of the x-values and y-values.
+#
+#     Preconditions:
+#       - coordinates != []
+#
+#     >>> split_coordinates([(1, 1), (2, 4), (3, 9)])
+#     ([1, 2, 3], [1, 4, 9])
+#     """
+#     points = sorted(coordinates)
+#     return ([x[0] for x in points], [y[1] for y in points])
 
 
 ############################################################################################
@@ -70,7 +66,9 @@ def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
 # Although I know how to make this implementation faster using the module tensorflow, the exact
 # algorithm used is beyond the scope of the course or any other math courses I have taken, and
 # as such, I was not fully convinced of its correctness, and so, did not use it.
-# For the purposes of this project, a Theta(n^2) algorithm is sufficient.
+# For the purposes of this project, a Theta(m * n * k) algorithm is sufficient, where matrix_1 has
+# dimension m * n, and matrix_2 had dimension n * k; this is because, in polynomial regression,
+# we usually don't take high-order polynomials.
 ############################################################################################
 
 # def matrix_multiplication_numpy(matrix_1: List[List[float]], matrix_2: List[List[float]]) \
@@ -87,7 +85,8 @@ def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
 #     """
 #     m1 = np.array(matrix_1)
 #     m2 = np.array(matrix_2)
-#     return list(np.multiply(m1, m2))
+#     multiple = np.matmul(m1, m2)
+#     return multiple.tolist()
 
 
 def matrix_multiplication_small(matrix_1: List[List[float]], matrix_2: List[List[float]])\
@@ -149,8 +148,14 @@ def find_coefficients(x_data: List[float], y_data: List[float], degree: int) -> 
     where X represents the matrix of powers of the x values, and y represents a list
     of the y values.
 
+    For more information on the correctness of this algorithm, visit these Wikipedia pages:
+    https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem
+    https://en.wikipedia.org/wiki/Polynomial_regression
+
     Preconditions:
-      - degree < len(x_data)
+      - 0 < degree < len(x_data)
+      - all(x_data[i] != x_data[j] for i in range(len(x_data))
+            for j in range(len(x_data)) if i != j)
     """
     x_matrix = make_matrix(x_data, degree)
     y_matrix = [[y] for y in y_data]
@@ -239,21 +244,17 @@ def make_matrix(points: List[float], degree: int) -> List[List[float]]:
 ############################################################################################
 
 class PolynomialRegression:
-    """Test case 1. Prototype version 2.0.
-
-    ver 1.1.: Defining polynomial function class to allow callables.
-    ver 2.0.: Change code to allow passing list of coordinates, that are changed to
-              two lists, and then, call find_coefficients, which are used as the coefficients
-              for the polynomial.
-              Also, the plotter has been modified slightly, although it can still be improved.
+    """ The polynomial regression model of the data.
 
     Public Instance Attributes:
       - coefficients: the coefficients of the terms of the polynomial, from
                       lowest order to highest.
-      - x_values:
-      - y_values:
-      - error_values:
-      - r_squared:
+      - x_values: the list of values for the independent (X) variable
+      - y_values: the list of values for the dependent (Y) variable
+      - error_values: the list of error values obtained from the difference of the
+                      a y-value and the polynomial model evaluated at the corresponding
+                      x-value
+      - r_squared: the coefficient of determination for the polynomial model generated
 
     Representation invariants:
       - self.coefficients != []
@@ -271,7 +272,7 @@ class PolynomialRegression:
     error_values: List[float]
     r_squared: float
 
-    def __init__(self, data: List[Tuple[float, float]], degree: int) -> None:
+    def __init__(self, x_values: List[float], y_values: List[float], degree: int) -> None:
         """Initialize the polynomial regression model of specified degree
         generated by input data.
 
@@ -279,16 +280,15 @@ class PolynomialRegression:
 
         Preconditions are as specified in the respective function docstrings.
         """
-        x_values, y_values = split_coordinates(data)
+        self.x_values = x_values
+        self.y_values = y_values
 
         beta = find_coefficients(x_values, y_values, degree)
         coefficients = [b[0] for b in beta]
 
         self.coefficients = coefficients
-        self.x_values = x_values
-        self.y_values = y_values
-        self.error_values = [self.y_values[i] - self(self.x_values[i])
-                             for i in range(len(self.x_values))]
+
+        self.error_values = [y_values[i] - self(x_values[i]) for i in range(len(x_values))]
         self.r_squared = self.find_r_squared()
 
     def __call__(self, x) -> float:
@@ -319,7 +319,9 @@ class PolynomialRegression:
         Preconditions:
           - self.coefficients != []
         """
-        return {'min error': min(self.error_values), 'max error': max(self.error_values)}
+        absolute_errors = [abs(error) for error in self.error_values]
+        return {'min absolute error': min(absolute_errors),
+                'max absolute error': max(absolute_errors)}
 
     def find_r_squared(self) -> float:
         """Return the coefficient of determination for the polynomial regression model
