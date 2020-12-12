@@ -121,7 +121,7 @@ def deforestation_read_csv(filepath: str, row_name: str) -> Any:
     with open(filepath, newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
         for row in reader:
-            climate = Climate(name=row_name, year=row["Period"], value=row["Estimated Natural Forest Cover"])
+            climate = Climate(name=row_name, year=row["Period"], value=row[row_name])
             res.append(climate)
 
     return res
@@ -134,6 +134,11 @@ def getdata() -> Any:
 
     #get CO2 data
     res.extend(co2_read_csv("annual-co-emissions-by-region/annual-co-emissions-by-region.csv", "Brazil"))
+
+    #get deforestation data 
+    res.extend(deforestation_read_csv("deforestation.csv", "Estimated Natural Forest Cover"))
+
+    return res
 
 if __name__ == '__main__':
     temp1 = Precipitation('AmazonPrecipitation20040201', 2004, None)
