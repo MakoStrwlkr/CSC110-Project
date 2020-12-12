@@ -20,3 +20,6 @@ class Climate:
         self.name = name
         self.year = year
         self.value = value
+
+    def __str__(self) -> str:
+        return str([self.name, self.year, self.value])
