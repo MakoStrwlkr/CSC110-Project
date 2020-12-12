@@ -1,6 +1,5 @@
 import csv
 from typing import Any
-import co2_read
 
 class Climate:
     """A class that save all of the precipitation data by longitude and latitude
@@ -26,11 +25,24 @@ class Climate:
     def __str__(self) -> str:
         return str([self.name, self.year, self.value])
 
+def co2_read_csv(filepath: str, country: str) -> Any:
+    """read CO2 data from given csv file. 
+    """
+    res = list()
+    with open(filepath, newline='') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',')
+        for row in reader:
+            if row["Entity"] == country:
+                climate = Climate(name=country, year=row["Year"], value=row["Annual CO2 emissions"])
+                res.append(climate)
+
+    return res
+
 def getdata() -> Any:
     """use this function to fetch all the data needed.
     """
     res = list()
 
     #get CO2 data
-    res.extend(co2_read.read_csv("annual-co-emissions-by-region/annual-co-emissions-by-region.csv", "Brazil"))
+    res.extend(co2_read_csv("annual-co-emissions-by-region/annual-co-emissions-by-region.csv", "Brazil"))
 
