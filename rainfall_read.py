@@ -1,9 +1,8 @@
 from getdata import Climate
 import numpy as np
 from pyhdf.SD import SD, SDC
-import csv
 import os
-from typing import Any, List, Tuple, Dict
+from typing import List, Tuple, Dict
 
 
 class Precipitation(Climate):
@@ -14,12 +13,12 @@ class Precipitation(Climate):
     """
     data: Dict[Tuple[int, int], List[float]]
 
-    def __init__(self, name: str, year: int) -> None:
+    def __init__(self, name: str, year: int, value: float) -> None:
         """Initialize a new precipitation dataset
 
         The dataset starts with no data
         """
-        Climate.__init__(self, name, year)
+        Climate.__init__(self, name, year, value)
         self.data = {}
 
     def add_area(self, location: Tuple[float, float], filepath: str) -> None:
@@ -45,6 +44,7 @@ class Precipitation(Climate):
         else:
             self.read_file(filepath, x, y)
             print(str((latitude, longitude)) + ' added.')
+            self.get_value()
 
     def read_file(self, filepath: str, x: int, y: int) -> None:
         path_dir = os.listdir(filepath)
@@ -56,27 +56,25 @@ class Precipitation(Climate):
                     and os.path.splitext(new_dir)[1].lower() == ".hdf"\
                     and str(self.year) in s\
                     and cur == 0:
-                self.data[(x, y)] = (np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])[x][y])
+                self.data[(x, y)] = [(np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])[x][y])]
                 cur = 1
             elif os.path.isfile(new_dir) \
                     and os.path.splitext(new_dir)[1].lower() == ".hdf" \
                     and str(self.year) in s\
                     and cur == 1:
-                temp_data = []
-                temp_data.extend(np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:]))
-                self.data[(x, y)].append(temp_data[x][y])
+                self.data[(x, y)].append(np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])[x][y])
 
     def get_value(self) -> None:
         num_point = len(self.data)
         num_month = 12
         sum_so_far = 0
         for point in self.data:
-            sum_so_far += self.data[point]
+            sum_so_far += sum(self.data[point])
 
         self.value = sum_so_far / num_month / num_point
 
 
 if __name__ == '__main__':
-    temp1 = Precipitation('AmazonPrecipitation20040201', 2004)
+    temp1 = Precipitation('AmazonPrecipitation20040201', 2004, None)
     temp1.add_area((50, -180), '3B43_rainfall')
     temp1.add_area((50, -179.75), '3B43_rainfall')
