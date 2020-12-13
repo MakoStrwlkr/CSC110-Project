@@ -4,5 +4,5 @@ To-do-list:
 - [x] Rainfall data
 - [x] CO2 data
 - [x] Deforestation data
-- [ ] data analyze
+- [x] data analyze
 - [ ] interactive report
