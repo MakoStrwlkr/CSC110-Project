@@ -2,7 +2,7 @@
 
 """
 import numpy as np
-from pyhdf.SD import SD, SDC
+# from pyhdf.SD import SD, SDC
 import csv
 import os
 from typing import List, Tuple, Any
