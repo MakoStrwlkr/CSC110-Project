@@ -8,28 +8,34 @@ for CSC110 materials, please do not consult our Course Syllabus.
 import math
 import random
 from typing import Set, Dict, List, Tuple
-from output_data import get_data
+from output_data import get_output_data
+from getdata import Climate
+from polyreg_v2_matrices import PolynomialRegression
 
 
-def interactive_model() -> None:
+def interactive_model(climates: List[Climate], poly: PolynomialRegression) -> None:
     """Run the interactive model for the data
     """
-    valid_dependent = {'r', 'r2', 'slope', 'co2', 'tree growth', 'year'}
+    valid_dependent = {'r2', 'slope', 'co2', 'forest area', 'year', 'error'}
 
     print('You can use this interactive model to look up the value of y at a certain x')
     print('y and x can be any one of: ' + ' | '.join(valid_dependent))
 
-    data = get_data()
+    data = get_output_data(climates, poly)
 
     while True:
         y = prompt_y(valid_dependent)
         valid_independent = valid_dependent.copy()
         valid_independent.remove(y)
-        x, expected = prompt_x(valid_independent, y)
-        values = get_dependent(data, x, y, expected)
-        print(f'{ x } = { expected } when { y } is')
-        print('\n'.join(str(value) for value in values))
-        log_trivia(data, x, y, expected)
+        if y == 'r2':
+            r2 = data['r2'][0]
+            print(f'The r\u00b2 of the polynomial regression is { r2 }')
+        else:
+            x, expected = prompt_x(valid_independent, y)
+            values = get_dependent(data, x, y, expected)
+            print(f'{ x } = { expected } when { y } is')
+            print('\n'.join(str(value) for value in values))
+            log_trivia(data, x, y, expected)
 
 
 def prompt_y(dependent: Set[str]) -> str:
@@ -77,7 +83,3 @@ def log_trivia(data: Dict[str, List[float]], x: str, y: str, expected: float) ->
     """Find trivia about the expected outputs and print them to the console
     """
     pass
-
-
-if __name__ == '__main__':
-    interactive_model()
