@@ -14,7 +14,7 @@ class Climate:
 
         Public Attributes:
             - name: the name of the data(e.g: CO2)
-            - years: the year of the data
+            - year: the year of the data
             - value: the value of the data
 
         Representation Invariants:
