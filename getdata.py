@@ -157,7 +157,7 @@ def read_data_from_csv(filename: str) -> List[Climate]:
     """
     res = list()
     with open(filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter='\t')
+        reader = csv.DictReader(csvfile, delimiter=',')
         for row in reader:
             climate = Climate(name=row["name"], year=int(row["year"]), value=float(row["value"]))
             res.append(climate)
@@ -166,4 +166,5 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 
 if __name__ == '__main__':
-    save_data_as_csv(getdata(), "version1.csv")
+    save_data_as_csv(getdata(), "dataset.csv")
+    # assert getdata() == read_data_from_csv("dataset.csv")
