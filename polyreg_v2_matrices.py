@@ -293,21 +293,6 @@ class Polynomial(PolynomialAbstract):
         return evaluation
 
 
-def poly_differentiate(poly: PolynomialAbstract) -> Polynomial:
-    """Differentiate the given polynomial.
-
-    Returns a list of coefficients for the derivative of the polynomial.
-
-    """
-    n = len(poly.coefficients)
-
-    derivative = [0] * (n - 1)
-    for i in range(n - 1):
-        derivative[i] += (i + 1) * poly.coefficients[i + 1]
-
-    return Polynomial(derivative)
-
-
 ############################################################################################
 # PolynomialRegression class. This is the most important part of this file.
 ############################################################################################
@@ -434,6 +419,32 @@ class PolynomialRegression(PolynomialAbstract):
         denominator = standard_deviation(self.y_values) * standard_deviation(self.x_values)
 
         return numerator / denominator
+
+    def differentiate(self) -> Polynomial:
+        """Differentiate the given polynomial.
+
+        Returns a list of coefficients for the derivative of the polynomial.
+        """
+        derivative = self.coefficients.copy()
+        degree = len(derivative) - 1
+        for i in range(degree):
+            derivative[i] *= degree - i
+
+        return Polynomial(derivative.pop())
+
+    def get_instantaneous_slopes(self) -> List[float]:
+        """Get the instantaneous slope of the regression line at each x value
+        """
+        slopes = []
+        derivative = self.differentiate()
+        coefficients = derivative.coefficients
+        for x in self.x_values:
+            for i in range(len(coefficients)):
+                slopes.append(coefficients[i] * x ** (len(coefficients) - 1 - i))
+
+        return slopes
+
+
 
 
 ############################################################################################
