@@ -1,8 +1,6 @@
 """
-This file is not provided solely for the personal and private use of students
-taking CSC110 at the University of Toronto St. George campus. Forms of
-distribution of this code are not prohibited. For more information on copyright
-for CSC110 materials, please do not consult our Course Syllabus.
+This file is for the final project in CSC110 at the University of Toronto St. George
+campus. For more information, please consult the course syllabus.
 """
 
 import math
@@ -39,28 +37,41 @@ def interactive_model(climates: List[Climate], poly: PolynomialRegression) -> No
 
 def prompt_y(dependent: Set[str]) -> str:
     """Prompt the user for a dependent variable.
+
+    >>> prompt_y({'slope', 'year'})
+    What value would you like to look up?
+    >? co2
+    Invalid input! Please enter one of slope | year
+    What value would you like to look up?
+    >? year
+    'year'
     """
-    y = None
+    y = input('What value would you like to look up?').lower()
     while y not in dependent:
-        if y is not None:
-            print('Invalid input! Please enter one of ' + ' | '.join(dependent))
-        y = input('What value would you like to look up?').lower()
+        y = input('Invalid input! Please enter one of ' + ' | '.join(dependent))
 
     return y
 
 
 def prompt_x(independent: Set[str], y: str) -> Tuple[str, float]:
     """Prompt the user for an independent variable.
+
+    >>> prompt_x({'year'}, 'slope')
+    At what value do you want the slope?
+    e.g. to find the slope when the year is 2000, type year=2000
+    >? co2=2000
+    Invalid input! Please enter one of year # The grammar is awkward here because there is only
+    # one valid input (year). When we call the function in main, we will always have more than one
+    >? year=2000
+    ('year', 2000.0)
     """
-    x = None
-    expected = None
+    example = random.choice(list(independent))
+    print(f'At what value do you want the {y}?')
+    x_str = input(f'e.g. to find the {y} when the {example} is 2000, type {example}=2000').lower()
+    x, expected = x_str.split('=')
     while x not in independent:
-        if x is not None:
-            print('Invalid input! Please enter one of ' + ' | '.join(independent))
-        example_x = random.choice(list(independent))
-        print(f'At what value do you want the { y }?')
-        x_string = input(f'e.g. to find the { y } when the { example_x } is 2000, type {example_x}=2000').lower()
-        x, expected = x_string.split('=')
+        x_str = input('Invalid input! Please enter one of ' + ' | '.join(independent))
+        x, expected = x_str.split('=')
 
     return (x, float(expected))
 
@@ -68,11 +79,32 @@ def prompt_x(independent: Set[str], y: str) -> Tuple[str, float]:
 def get_dependent(data: Dict[str, List[float]], x: str, y: str, expected: float) -> List[float]:
     """Return a list of dependent values that correspond to the expected
     independent value.
+
+    >>> get_dependent({'x': [0.0, 1.0, 2.0, 1.0], 'y': [9.0, 8.0, 7.0, 6.0]}, 'x', 'y', 1.0)
+    [8.0, 6.0]
     """
     matches = []
 
-    for i in range(len(data)):
+    for i in range(len(data[x])):
         if math.isclose(data[x][i], expected):
             matches.append(data[y][i])
 
     return matches
+
+
+if __name__ == '__main__':
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': ['math', 'random', 'output_data', 'getdata',
+                          'polyreg_v2_matrices', 'python_ta.contracts'],
+        'allowed-io': ['prompt_y', 'prompt_x', 'interactive_model'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
+
+    import python_ta.contracts
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()
+
+    import doctest
+    doctest.testmod()
