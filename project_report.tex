@@ -115,21 +115,31 @@ The data we show here is based on joint estimates by the Brazilian National Inst
 
 \begin{text}
 
+TODO: INPUT DESCRIPTION.
+
 We first create a function that parses the \texttt{html} element of the stats on the website as a string, and converts it to a \texttt{nested array} so that it’s easier to work with. This will involve using a \texttt{for loop}, \texttt{if statements}, and an \texttt{accumulator} keeping track of the data parsed so far. Using this function, we will collect our data for deforestation in the Amazon rain-forest over the past few decades. With the data now converted into a form that we can easily manipulate, we shall focus on analysing the data using our own functions.
+
+
+TO REVIEW: ANALYSIS DESCRIPTION.
 
 For this project, we use smooth polynomial fitting to relate two of the variables in our \texttt{nested list}. Now, although there exist readily available functions that would do the same in the module \texttt{numpy} \citep{Sci20}, we try implementing our own functions for the same, to test our learning from the course.
 
-We split the mathematical algorithm for this problem using top-down design. Firstly, the main function would have two lists, \texttt{l\_x, l\_y}, of same length as input (for the two variables), along with an integer $n$ (where $n \leq \texttt{len(l\_x)}$; representing degree of intended polynomial). The function body would have calls to helper functions. Note: this is only a rough outline and the exact technical details may be changed based on the results after testing the functions.
+We split the mathematical algorithm for this problem using top-down design. The most important part of the data analysis section is the PolynomialRegression custom class that we have defined, which, when initializing a variable of this class, takes in a dictionary with the name of the independent variable as the key, and its corresponding value in the dictionary as the list of all its values, and also, a corresponding dictionary for the dependent variable, and also a specified degree for the polynomial, and the level of precision expected. The initializer then calls upon a function that we designed using the ordinary least squares method to create a list of coefficients for the polynomial function that has the least variance with respect to the input data. Note that this list is implemented in terms of ascending order of power, to favour the implementation of the other methods in this class that analyze how well this polynomial represents the data (i.e., a measure of the accuracy of this polynomial). We defined the method \texttt{\_\_call\_\_} to allow the polynomial to defined as a callable, i.e., if \texttt{poly} is a variable of type PolynomialRegression, we we can simply evaluate \texttt{poly} at a value \texttt{x} by calling \texttt{poly(x)}.
 
-Firstly, we have a function to calculate the perpendicular distance of one point from a given polynomial. As opposed to the naive approach to the problem, we use the Newton-Raphson method \textit{repeatedly} to estimate a solution for the derivative of the expression for the difference between the point and the polynomial, hence finding the coordinates of the foot of perpendicular, and consequently, the length of perpendicular.
+We first have the method \texttt{r\_squared} to calculate the coefficient of determination for this polynomial. We also have \texttt{extreme\_absolute\_error} to return the maximum and minimum absolute difference between the polynomial's value and a particular value in the input data. Then, we have the additional methods \texttt{covariance\_with\_polynomial} and \texttt{correlation\_of\_data} as additional measure of accuracy.
 
-The first estimate for the polynomial will be trivial, and we will then run the simplex algorithm to minimize the sum of the squares of the perpendiculars using two more helper functions, yielding the polynomial regression model. We now move towards plotting the resulting graph using the \texttt{matplotlib} library.
+The other part in this section of the project is defining our own functions to handle the matrices involved in such a computation. We have the functions \texttt{make\_matrix} and \texttt{find\_coefficients} which are perhaps the most important functions in this part. The former initializes the matrix $X$, and the latter solves the matrix equation $\vec{y} = X\vec{\beta} + \epsilon$ for $\beta$, where $X$ represents the matrix of powers of $x$ created from the input data, $\vec{y}$ represents the values of $y$ in the input data, and $\vec{\beta}$ is the estimated coefficients vector, while $\vec{\epsilon}$ consists of the random errors at each of the points (i.e., the difference between the polynomial evaluated at the point and the actual $y$-value). Since we could not find any efficient way to create an algorithm to compute the inverses (we haven't really covered any such `efficient' algorithm in either MAT223 or MAT240), we made use of \texttt{numpy}'s built-in function called \texttt{numpy.linalg.inv()} along with a type conversion method \texttt{tolist()} that converts objects of type array (a data class in \texttt{numpy}) to a nested list format.
 
-We also plan to write a function to calculate the coefficient of determination \texttt{$r_2$} to check whether the graph shows an appropriate relationship between the independent variable (forest cover) and the dependent variable.
+Now, finally, we also added a method in the PolynomialRegression class to allow for plotting the graph of the polynomial and a scatter plot of the data, using the functions \texttt{numpy.linspace} \texttt{matplotlib.pyplot}, and specifying our own customizations to the graph.
+
+
+TODO: OUTPUT DESCRIPTION.
 
 In addition to the graph, we plan to create an interactive text-based report of our data, where the user inputs a value for the independent or dependent variable, and the program will provide the corresponding dependent or independent value, coefficient of determination, or the slope of the tangent at the point, depending on which one the user asks for. The output will be text-based, and will require string concatenation, and if statements to check whether to add trivial information to the report.
 
 The input/output model will use while loops and input prompt to keep the program interactive. We also extrapolate the data to yield predictions about future data using the interactive i/o model. Finally, we use the extrapolated data to summarize the upcoming significant years where the dependent variable will reach a certain milestone.
+
+TODO: MAIN DESCRIPTION.
 
 \newpage
 
@@ -146,6 +156,48 @@ It takes a valid string path, which is the path to our CSV file.
 This function will return a class - Pandas DataFrame that contains the data of the CSV file. Pandas DataFrame is easier for calculating dataset thanks to its various built-in functions. This way, we can access each cell of the CSV file for our later research.
 
 \end{text}
+
+\newpage
+
+\item \section*{Part 5}
+
+\begin{text}
+
+
+\end{text}
+
+\newpage
+
+\item \section*{Part 6}
+
+\begin{text}
+
+
+
+For the data analysis part of this project, we initially planned on using an approach that was quite similar to the calculus `way' of constructing the polynomial regression (hereby shortened to simply `polyreg') model. For instance, in the project proposal, we mentioned that we would first construct a trivial initial candidate polynomial (we were, of course, referring to the linear regression model from Assignment 1, when we said trivial, since it has the right `shape' but nor the right degree), which would then use to find the sum of the squares of the perpendicular distance from each of the points to the polynomial. We had also mentioned that we would then minimize this sum by using the simplex algorithm.
+
+However, we later found out that coding the simplex algorithm and modifying it to fit this task was not a managaeable feat, as there so many degrees of freedom for this problem that we simply could not write an efficient piece of code to work in all cases.
+
+As such, we switched our approach to the more `linear algebra way' of solving this task, by using matrices instead. We made good use of the Gauss-Markov theorem [\textbf{TODO: Add citations}, and applied it to the ordinary least squares method \textbf{TODO: Add citations} to arrive at a relatively straightforward, already well-established, and mathematically proven approach that was more guaranteed to offer a good estimate for the polynomial model.
+
+
+\end{text}
+
+\newpage
+
+\item \section*{Part 7}
+
+\begin{text}
+
+
+Notes for discussion of polyreg:
+TODO: Add note on whether it is appropriate to use polyreg for extrapolation.
+
+Notes for discussion of output / interaction:
+TODO: Add discussion points
+
+\end{text}
+
 
 \maketitle
 
