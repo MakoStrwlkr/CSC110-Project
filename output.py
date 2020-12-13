@@ -35,7 +35,6 @@ def interactive_model(climates: List[Climate], poly: PolynomialRegression) -> No
             values = get_dependent(data, x, y, expected)
             print(f'{ x } = { expected } when { y } is')
             print('\n'.join(str(value) for value in values))
-            log_trivia(data, x, y, expected)
 
 
 def prompt_y(dependent: Set[str]) -> str:
@@ -77,9 +76,3 @@ def get_dependent(data: Dict[str, List[float]], x: str, y: str, expected: float)
             matches.append(data[y][i])
 
     return matches
-
-
-def log_trivia(data: Dict[str, List[float]], x: str, y: str, expected: float) -> None:
-    """Find trivia about the expected outputs and print them to the console
-    """
-    pass
