@@ -2,7 +2,7 @@
 
 """
 import numpy as np
-# from pyhdf.SD import SD, SDC
+from pyhdf.SD import SD, SDC
 import csv
 import os
 from typing import List, Tuple, Any
@@ -13,7 +13,7 @@ class Climate:
 
         Public Attributes:
             - name: the name of the data(e.g: CO2)
-            - years: the year of the data
+            - year: the year of the data
             - value: the value of the data
 
         Representation Invariants:
