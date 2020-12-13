@@ -10,7 +10,7 @@ referenced from any sources on the Internet. The authors reserve all rights to r
 work, and no one, apart from the graders of this project and the instructors of CSC110 can
 modify / use this code as their own.
 
-This file is Copyright (c) by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
+This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
 
 import numpy as np
@@ -25,7 +25,8 @@ import math
 ############################################################################################
 
 
-# We changed the way the PolynomialRegression class initializes values so we didn't use this.
+# I changed the way the PolynomialRegression class initializes values so we didn't use this.
+#
 # def split_coordinates(coordinates: List[Tuple[float, float]]) -> Tuple[List[float], List[float]]:
 #     """Return a tuple of the x-values and y-values.
 #
@@ -63,9 +64,10 @@ def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
 ############################################################################################
 # Initially, I had planned on using numpy's matrix multiplication function, which is much more
 # efficient than the naive approach I used.
-# Although I know how to make this implementation faster using the module tensorflow, the exact
-# algorithm used is beyond the scope of the course or any other math courses I have taken, and
-# as such, I was not fully convinced of its correctness, and so, did not use it.
+# Although I know how to make this implementation faster using vectorization approach from the
+# module tensorflow, the exact algorithm used is beyond the scope of the course or any other math
+# courses I have taken, and as such, I was not fully convinced of its correctness, and so, did not
+# use it.
 # For the purposes of this project, a Theta(m * n * k) algorithm is sufficient, where matrix_1 has
 # dimension m * n, and matrix_2 had dimension n * k; this is because, in polynomial regression,
 # we usually don't take high-order polynomials.
@@ -74,6 +76,7 @@ def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
 # def matrix_multiplication_numpy(matrix_1: List[List[float]], matrix_2: List[List[float]]) \
 #         -> List[List[float]]:
 #     """Return the matrix matrix_1 * matrix_2, where * represents matrix multiplication.
+#     Most efficient algorithm for matrix multiplication.
 #
 #     Preconditions:
 #       - len(matrix_1[0]) == len(matrix_2)
@@ -93,14 +96,6 @@ def matrix_multiplication_small(matrix_1: List[List[float]], matrix_2: List[List
         -> List[List[float]]:
     """Return the matrix matrix_1 * matrix_2, where * represents matrix multiplication.
 
-    Note: This is not the most efficient way to do matrix multiplication.
-    While it can certainly be made more efficient, we have not covered the
-    required mathematics foundations to do this.
-
-    As such, I am not fully convinced of why that algorithm works, but I have still
-    translated it into Python code, and added it to the addendum file
-    efficient_functions.py as seen there.
-
     Preconditions:
       - len(matrix_1[0]) == len(matrix_2)
 
@@ -109,6 +104,11 @@ def matrix_multiplication_small(matrix_1: List[List[float]], matrix_2: List[List
     >>> matrix_multiplication_small(mat_1, mat_2)
     [[1, 1], [1, 1]]
     """
+    # Note: This is not the most efficient way to do matrix multiplication.
+    #       While it can certainly be made more efficient, the improvements for our purposes is
+    #       negligible since we are only concerned with small degrees, and so, this function
+    #       suffices.
+
     multiple = [[0 for _ in range(len(matrix_2))] for _ in range(len(matrix_1))]
 
     for i in range(len(matrix_1)):
@@ -168,6 +168,14 @@ def find_coefficients(x_data: List[float], y_data: List[float], degree: int) -> 
 
     beta = matrix_multiplication_small(inv_multiply_with_transpose, y_matrix)
 
+    # The following lines were commented out after I changed the function implementation.
+    # Originally, this function would return a tuple of lists: one with the coefficients,
+    # and the other with the absolute random errors at each point.
+    # but I changed my code to do that in the PolynomialRegression class.
+    # Thus, this was rendered obsolete.
+    # If you wish to see how this worked, first change the return type of this function
+    # to tuple, and then, in PolynomialRegression class, change the code appropriately.
+    # Both versions work, but the current one is more readable.
     # mult_beta_x = matrix_multiplication_small(x_matrix, beta)
     #
     # epsilon = [y_matrix[i][0] - mult_beta_x[i][0] for i in range(len(y_matrix))]
@@ -253,8 +261,9 @@ class PolynomialAbstract:
     coefficients: List[float]
 
     def __call__(self, value) -> float:
-        """A method to call the polynomial. This makes it easier to evaluate the
-        polynomial function at any value.
+        """Call the polynomial.
+
+        This makes it easier to evaluate the polynomial function at any value.
         """
         raise NotImplementedError
 
@@ -286,6 +295,9 @@ class Polynomial(PolynomialAbstract):
     def __call__(self, value) -> float:
         """A method to call the polynomial. This makes it easier to evaluate the
         polynomial function at any value.
+
+        Preconditions:
+          - self has already been initialized (i.e., init has already run).
         """
         evaluation = 0
         for index, coefficient in enumerate(self.coefficients):
@@ -331,14 +343,25 @@ class PolynomialRegression(PolynomialAbstract):
         """Initialize the polynomial regression model of specified degree
         generated by input data.
 
-        coefficients is in the form [a_0, a_1, ..., a_(degree), a_(degree)]
+        precision refers to the maximum number of decimals in the returned values.
+        This is done to avoid floating point error.
 
-        Preconditions are as specified in the respective function docstrings.
+        self.coefficients is in the form [a_0, a_1, ..., a_(degree), a_(degree)]
+
+        More preconditions are as specified in the respective function docstrings.
+
+        Preconditions:
+          - 0 <= precision
         """
+
+        # initialize the x- and y-values in the regression model
         self.x_values = x_values
         self.y_values = y_values
 
+        # find the coefficient matrix (column matrix) for the input data
         beta = find_coefficients(x_values, y_values, degree)
+
+        # to avoid floating point error, round it to specified number of decimals
         coefficients = [round(b[0], precision) for b in beta]
 
         self.coefficients = coefficients
@@ -347,9 +370,16 @@ class PolynomialRegression(PolynomialAbstract):
                              for i in range(len(x_values))]
         self.r_squared = round(self.find_r_squared(), precision)
 
+    # Sorry, this code is repeated from above, but when I tried to make __call__
+    # a method in the abstract class, I got errors from PyCharm.
+    # although the code smells a bit, this is manageable.
     def __call__(self, value) -> float:
         """A method to call the polynomial. This makes it easier to evaluate the
         polynomial function at any value.
+
+        >>> polynomial = PolynomialRegression([1, 2, 3], [1, 4, 9], 2, 5)
+        >>> math.isclose(polynomial(4), 16.0)
+        True
         """
         evaluation = 0
         for index, coefficient in enumerate(self.coefficients):
@@ -365,7 +395,18 @@ class PolynomialRegression(PolynomialAbstract):
         f = self(x)
         plt.plot(x, f)
 
-        plt.scatter(self.x_values, self.y_values)
+        plt.style.use('seaborn')
+
+        max_val = max(self.y_values)
+        min_val = min(self.y_values)
+
+        colour_gradient = 6 / (max_val - min_val)
+        colour_intercept = 4 - (colour_gradient * min_val)
+
+        colours = [colour_gradient * y_val + colour_intercept for y_val in self.y_values]
+
+        plt.scatter(self.x_values, self.y_values, c=colours, cmap='Blues',
+                    edgecolor='black', linewidth=1, alpha=0.75)
 
         plt.tight_layout()
 
@@ -423,10 +464,15 @@ class PolynomialRegression(PolynomialAbstract):
     def differentiate(self) -> Polynomial:
         """Differentiate the given polynomial.
 
-        Returns a list of coefficients for the derivative of the polynomial.
+        Returns the derivative of the polynomial.
+
+        >>> polynomial = PolynomialRegression([1, 2, 3], [1, 4, 9], 2, 5)
+        >>> diff = polynomial.differentiate()
+        >>> diff.coefficients == [1, 2]
+        True
         """
         derivative = self.coefficients.copy()
-        for i in range(len(derivative)):
+        for i in range(len(derivative) - 1):
             derivative[i] *= i
 
         derivative.pop(0)
@@ -434,6 +480,10 @@ class PolynomialRegression(PolynomialAbstract):
 
     def get_instantaneous_slopes(self) -> List[float]:
         """Get the instantaneous slope of the regression line at each x value
+
+        >>> poly = PolynomialRegression([1, 2, 3], [1, 4, 9], 2, 5)
+        >>> poly.get_instantaneous_slopes()
+        [2.0, 4.0, 6.0]
         """
         slopes = []
         derivative = self.differentiate()
@@ -448,7 +498,7 @@ class PolynomialRegression(PolynomialAbstract):
 
 
 ############################################################################################
-# Some functions to help with error calculations.
+# Some helper functions to help with error calculations.
 ############################################################################################
 
 
