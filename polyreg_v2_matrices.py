@@ -240,10 +240,79 @@ def make_matrix(points: List[float], degree: int) -> List[List[float]]:
 
 
 ############################################################################################
-# Polynomial class, and defining polynomial
+# Polynomial class, and defining polynomial, and derivative, which will be useful
+# in the output section of this project.
 ############################################################################################
 
-class PolynomialRegression:
+
+class PolynomialAbstract:
+    """A representation of a polynomial function.
+
+    This is an abstract class. Only subclasses should be instantiated.
+    """
+    coefficients: List[float]
+
+    def __call__(self, value) -> float:
+        """A method to call the polynomial. This makes it easier to evaluate the
+        polynomial function at any value.
+        """
+        raise NotImplementedError
+
+
+class Polynomial(PolynomialAbstract):
+    """A polynomial function class to represent a polynomial in Python.
+
+    This was defined to allow for defining the derivative of a polynomial
+    as used in the output section of this project.
+
+    Public Instance Attributes:
+      - coefficients: the coefficients of the terms of the polynomial, from
+                      lowest order to highest.
+    """
+    coefficients: List[float]
+
+    def __init__(self, coefficients) -> None:
+        """ Initialize the polynomial when inputted a list of coefficients
+         in the order a_0, a_1, ..., a_{n-1}, a_n, i.e.,
+         coefficients[i] represents the coefficient of the term with x^i
+         for the polynomial.
+
+         Preconditions:
+           - coefficients != []
+
+        """
+        self.coefficients = coefficients
+
+    def __call__(self, value) -> float:
+        """A method to call the polynomial. This makes it easier to evaluate the
+        polynomial function at any value.
+        """
+        evaluation = 0
+        for index, coefficient in enumerate(self.coefficients):
+            evaluation += coefficient * value ** index
+        return evaluation
+
+
+def poly_differentiate(poly: PolynomialAbstract) -> Polynomial:
+    """Differentiate the given polynomial.
+
+    Returns a list of coefficients for the derivative of the polynomial.
+
+    """
+    n = len(poly.coefficients)
+
+    derivative = [0] * (n - 1)
+    for i in range(n - 1):
+        derivative[i] += (i + 1) * poly.coefficients[i + 1]
+
+    return Polynomial(derivative)
+
+
+############################################################################################
+# PolynomialRegression class. This is the most important part of this file.
+############################################################################################
+
+class PolynomialRegression(PolynomialAbstract):
     """ The polynomial regression model of the data.
 
     Public Instance Attributes:
@@ -293,16 +362,19 @@ class PolynomialRegression:
                              for i in range(len(x_values))]
         self.r_squared = round(self.find_r_squared(), precision)
 
-    def __call__(self, x) -> float:
-        """A method to call the polynomial.
+    def __call__(self, value) -> float:
+        """A method to call the polynomial. This makes it easier to evaluate the
+        polynomial function at any value.
         """
         evaluation = 0
         for index, coefficient in enumerate(self.coefficients):
-            evaluation += coefficient * x ** index
+            evaluation += coefficient * value ** index
         return evaluation
 
     def plotter(self) -> None:
-        """Sample plotter. Please modify this."""
+        """Plot a simple graph of the polynomial, as well as a scatter graph
+        of values in the two lists.
+        """
         x = np.linspace(0.5 * min(self.x_values), 1.25 * max(self.x_values),
                         100, endpoint=True)
         f = self(x)
