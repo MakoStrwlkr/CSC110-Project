@@ -70,9 +70,9 @@ With these major pieces of evidence of deforestation correlating to the change i
 \item \section*{Part 3}
 
 \begin{text}
-\begin{itemlize}
-
-\end{itemlize}
+\begin{itemize}
+  
+\end{itemize}
 \end{text}
 \newpage
 
@@ -157,7 +157,11 @@ As such, we switched our approach to the more `linear algebra way' of solving th
 
 
 Notes for discussion of polyreg:
-TODO: Add note on whether it is appropriate to use polyreg for extrapolation.
+TODO: Review this part after we have completed main.py and change as required.
+
+With polynomial regression models, one must be careful when extrapolating from the available data. As we saw with the case for some of the polynomials we encountered when testing with randomly generated data points, the behaviour of the polynomial strayed away from the general trend as we moved away from the region of the original data.
+
+As such, while the polynomial model certainly proved helpful for observing whether there exists any nonlinear trend in the data, we must bear in mind that this is not the only form of regressional analysis possible. In particular, we might also be motivated to test out our hypothesis with exponential models (especially as we have an estimate of whether the trend will be increasing or decreasing) since, then, the direction of change of the model is the same throughout. However, the main drawback behind these models (which is also the reason why we didn't use them) is that they're relatively more `rigid' and thus have less flexibility in their application. Furthermore, for higher values of extrapolation, the exponential model would usually overestimate the behaviour of the data by quite a large amount.
 
 Notes for discussion of output / interaction:
 TODO: Add discussion points
