@@ -1,0 +1,6 @@
+pyhdf
+numpy==1.9.3
+matplotlib
+# basemap
+# for the installation of pyhdf, please see https://fhs.github.io/pyhdf/install.html
+# make sure that <hdf.h> is in your PATH.
