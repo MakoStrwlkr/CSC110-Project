@@ -18,7 +18,6 @@ class Climate:
 
         Representation Invariants:
             - self.name != ''
-            - 1986 <= self.years <= 2018
     """
     name: str
     year: int
@@ -145,7 +144,7 @@ def save_data_as_csv(data: list, filename: str) -> None:
     """
     with open(filename, 'w', newline='') as csvfile:
         fieldnames = ["name", "year", "value"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter='\t')
 
         writer.writeheader()
         for i in data:
@@ -157,7 +156,7 @@ def read_data_from_csv(filename: str) -> List[Climate]:
     """
     res = list()
     with open(filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=',')
+        reader = csv.DictReader(csvfile, delimiter='\t')
         for row in reader:
             climate = Climate(name=row["name"], year=int(row["year"]), value=float(row["value"]))
             res.append(climate)
@@ -167,4 +166,4 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 if __name__ == '__main__':
     save_data_as_csv(getdata(), "dataset.csv")
-    # assert getdata() == read_data_from_csv("dataset.csv")
+    # read_data_from_csv("dataset.csv")
