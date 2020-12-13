@@ -421,7 +421,10 @@ class PolynomialRegression(PolynomialAbstract):
 
         cbar = plt.colorbar()
         cbar.set_label(self.y_var)
-
+        
+        plt.xlabel(self.x_var)
+        plt.ylabel(self.y_var)
+        
         plt.tight_layout()
 
         plt.show()
