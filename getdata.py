@@ -1,9 +1,11 @@
-from ast import NodeTransformer
+""" CSC110 Course Project - Read Data and Store with Defined Type
+
+"""
 import numpy as np
 from pyhdf.SD import SD, SDC
 import csv
 import os
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Any
 
 
 class Climate:
@@ -30,75 +32,66 @@ class Climate:
     def __str__(self) -> str:
         return str([self.name, self.year, self.value])
 
-class Precipitation(Climate):
-    """
-    A class that save all of the precipitation data by longitude and latitude
 
-    Private Attributes:
-        - area: a list of list contain latitude and longitude corresponding x and y
-    """
-    data: Dict[Tuple[int, int], List[float]]
-
-    def __init__(self, name: str, year: int, value: float) -> None:
-        """Initialize a new precipitation dataset
-
-        The dataset starts with no data
-        """
-        Climate.__init__(self, name, year, value)
-        self.data = {}
-
-    def add_area(self, location: Tuple[float, float], filepath: str) -> None:
-        """Add the given location(Tuple) responding grid by 0.25°*0.25° in scope of 50°S to 50°N and 180°W – 180°E
-        S is negative and W correspond to negative value.
+def precipitation_read_hdf(filepath: str,
+                           leftup: Tuple[float, float],
+                           rightbottom: Tuple[float, float]) -> List[Climate]:
+    """Read precipitation data from given hdf file. And select a rectangle area by given leftup and rightbottom.
+    Add the given location(Tuple) responding grid by 0.25°*0.25° in scope of responding grid by 0.25°*0.25°
+    in scope of 50°S to 50°N and 180°W – 180°E. S is negative and W correspond to negative value.
 
         Representation Invariants:
-            - -50 <= location[0] <= 50
-            - -180 <= location[1] <= 180
-        """
-        latitude = location[0]
-        longitude = location[1]
-        if latitude == -50:
-            latitude += 0.01
-        if longitude == 180:
-            longitude = -longitude
+            - -50 <= leftup[0] <= 50
+            - -50 <= rightbottom[0] <= 50
+            - -180 <= leftup[1] <= 180
+            - -180 <= rightbottom[1] <= 180
+            - leftup[0] < rightbottom[0]
+            - leftup[1] > rightbottom[1]
+    """
+    res = list()
+    lat1 = leftup[0]
+    lon1 = leftup[1]
+    lat2 = rightbottom[0]
+    lon2 = rightbottom[1]
+    if lat1 == -50:
+        lat1 += 0.01
+    if lon1 == 180:
+        lon1 = -lon1
+    if lat2 == -50:
+        lat2 += 0.01
+    if lon2 == 180:
+        lon2 = -lon2
 
-        x = int((-(latitude - 50)) // 0.25)
-        y = int((longitude + 180) // 0.25)
+    x1 = int((-(lat1 - 50)) // 0.25)
+    y1 = int((lon1 + 180) // 0.25)
+    x2 = int((-(lat2 - 50)) // 0.25)
+    y2 = int((lon2 + 180) // 0.25)
 
-        if (x, y) in self.data:
-            print(str((latitude, longitude)) + ' already exists.')
-        else:
-            self.read_file(filepath, x, y)
-            print(str((latitude, longitude)) + ' added.')
-            self.get_value()
+    path_dir = os.listdir(filepath)
+    stored_data = {}
+    for s in path_dir:
+        new_dir = os.path.join(filepath, s)
+        year = os.path.splitext(new_dir)[0].split('.')[1][0:4]
+        if os.path.splitext(new_dir)[1].lower() == ".hdf" \
+                and year not in stored_data:
+            temp = np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])
+            sum_so_far = 0.0
+            for i in range(x1, x2 + 1):
+                for j in range(y1, y2 + 1):
+                    sum_so_far += temp[i][j]
+            stored_data[year] = sum_so_far
 
-    def read_file(self, filepath: str, x: int, y: int) -> None:
-        path_dir = os.listdir(filepath)
-        cur = 0
+        elif os.path.splitext(new_dir)[1].lower() == ".hdf":
+            temp = np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])
+            sum_so_far = 0.0
+            for i in range(x1, x2 + 1):
+                for j in range(y1, y2 + 1):
+                    sum_so_far += temp[i][j]
+            stored_data[year] += sum_so_far
+    for year in stored_data:
+        res.append(Climate('Amazon Precipitation', int(year), stored_data[year] / 12 / (x2 - x1 + 1) / (y2 - y1 + 1)))
 
-        for s in path_dir:
-            new_dir = os.path.join(filepath, s)
-            if os.path.isfile(new_dir) \
-                    and os.path.splitext(new_dir)[1].lower() == ".hdf" \
-                    and str(self.year) in s \
-                    and cur == 0:
-                self.data[(x, y)] = [(np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])[x][y])]
-                cur = 1
-            elif os.path.isfile(new_dir) \
-                    and os.path.splitext(new_dir)[1].lower() == ".hdf" \
-                    and str(self.year) in s \
-                    and cur == 1:
-                self.data[(x, y)].append(np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])[x][y])
-
-    def get_value(self) -> None:
-        num_point = len(self.data)
-        num_month = 12
-        sum_so_far = 0
-        for point in self.data:
-            sum_so_far += sum(self.data[point])
-
-        self.value = sum_so_far / num_month / num_point
-
+    return res
 
 
 def co2_read_csv(filepath: str, country: str) -> Any:
@@ -109,20 +102,21 @@ def co2_read_csv(filepath: str, country: str) -> Any:
         reader = csv.DictReader(csvfile, delimiter=',')
         for row in reader:
             if row["Entity"] == country:
-                climate = Climate(name="Annual CO2 emissions of " + country,\
-                     year=row["Year"], value=row["Annual CO2 emissions"])
+                climate = Climate(name="Annual CO2 emissions of " + country,
+                                  year=int(row["Year"]), value=float(row["Annual CO2 emissions"]))
                 res.append(climate)
 
     return res
 
-def deforestation_read_csv(filepath: str, row_name: str) -> Any:
+
+def deforestation_read_csv(filepath: str, row_name: str) -> List[Climate]:
     """read deforestation from given csv file
     """
     res = list()
     with open(filepath, newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
         for row in reader:
-            climate = Climate(name=row_name, year=row["Period"], value=row[row_name])
+            climate = Climate(name=row_name, year=int(row["Period"]), value=float(row[row_name].replace(',', '')))
             res.append(climate)
 
     return res
@@ -134,13 +128,17 @@ def getdata() -> List:
     """
     res = list()
 
-    #get CO2 data
-    res.extend(co2_read_csv("annual-co-emissions-by-region/annual-co-emissions-by-region.csv", "Brazil"))
+    # get CO2 data
+    res.extend(co2_read_csv('annual-co-emissions-by-region/annual-co-emissions-by-region.csv', 'Brazil'))
 
-    #get deforestation data 
-    res.extend(deforestation_read_csv("deforestation.csv", "Estimated Natural Forest Cover"))
+    # get deforestation data
+    res.extend(deforestation_read_csv('deforestation.csv', 'Estimated Natural Forest Cover'))
+
+    # get precipitation data
+    res.extend(precipitation_read_hdf('3B43_rainfall', (0.553222, -65.162917), (-4.070444, -52.109639)))
 
     return res
+
 
 def save_data_as_csv(data: list, filename: str) -> None:
     """save the data from getdata() as csv.
@@ -153,20 +151,19 @@ def save_data_as_csv(data: list, filename: str) -> None:
         for i in data:
             writer.writerow({"name": i.name, "year": i.year, "value": i.value})
 
-def read_data_from_csv(filename: str) -> Any:
+
+def read_data_from_csv(filename: str) -> List[Climate]:
     """read the data from saved csv
     """
     res = list()
     with open(filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
         for row in reader:
-            climate = Climate(name=row["name"], year=row["year"], value=row["value"])
+            climate = Climate(name=row["name"], year=int(row["year"]), value=float(row["value"]))
             res.append(climate)
 
     return res
 
+
 if __name__ == '__main__':
-    temp1 = Precipitation('AmazonPrecipitation20040201', 2004, None)
-    temp1.add_area((50, -180), '3B43_rainfall')
-    temp1.add_area((50, -179.75), '3B43_rainfall')
     save_data_as_csv(getdata(), "version1.csv")
