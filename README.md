@@ -3,6 +3,6 @@
 To-do-list:
 - [x] Rainfall data
 - [x] CO2 data
-- [ ] Deforestation data
-- [ ] data analyze
+- [x] Deforestation data
+- [x] data analyze
 - [ ] interactive report
