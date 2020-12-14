@@ -167,12 +167,12 @@ class PolynomialRegression(PolynomialAbstract):
         of values in the two lists.
         """
         plt.style.use('seaborn')
-        
+
         x = np.linspace(0.5 * min(self.x_values), 1.25 * max(self.x_values),
                         100, endpoint=True)
         f = self(x)
         plt.plot(x, f, color='green')
-        
+
         max_val = max(self.y_values)
         min_val = min(self.y_values)
 
