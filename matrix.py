@@ -142,48 +142,50 @@ def find_coefficients(x_data: List[float], y_data: List[float], degree: int) -> 
 
 ############################################################################################
 # Unused (alternative) functions for matrix multiplication.
+# You can try uncommenting these functions and using timeit to compare the running time of
+# these with that of matrix_multiplication_small.
 ############################################################################################
 
 
-def matrix_multiplication_numpy(matrix_1: List[List[float]], matrix_2: List[List[float]])\
-        -> Any:
-    """Return the matrix matrix_1 * matrix_2, where * represents matrix multiplication.
-    Most efficient function for matrix multiplication.
+# def matrix_multiplication_numpy(matrix_1: List[List[float]], matrix_2: List[List[float]])\
+#         -> Any:
+#     """Return the matrix matrix_1 * matrix_2, where * represents matrix multiplication.
+#     Most efficient function for matrix multiplication.
 
-    Preconditions:
-      - len(matrix_1[0]) == len(matrix_2)
+#     Preconditions:
+#       - len(matrix_1[0]) == len(matrix_2)
 
-    >>> mat_1 = [[1], [1]]
-    >>> mat_2 = [[1, 1]]
-    >>> matrix_multiplication_numpy(mat_1, mat_2)
-    [[1, 1], [1, 1]]
-    """
-    m1 = np.array(matrix_1)
-    m2 = np.array(matrix_2)
-    multiple = np.matmul(m1, m2)
-    return multiple.tolist()
+#     >>> mat_1 = [[1], [1]]
+#     >>> mat_2 = [[1, 1]]
+#     >>> matrix_multiplication_numpy(mat_1, mat_2)
+#     [[1, 1], [1, 1]]
+#     """
+#     m1 = np.array(matrix_1)
+#     m2 = np.array(matrix_2)
+#     multiple = np.matmul(m1, m2)
+#     return multiple.tolist()
 
 
-def matrix_multiplication_dot(matrix_1: List[List[float]], matrix_2: List[List[float]]) -> Any:
-    """Return the matrix matrix_1 * matrix_2 where * represents matrix multiplication.
-    More efficient than matrix_multiplication_small.
+# def matrix_multiplication_dot(matrix_1: List[List[float]], matrix_2: List[List[float]]) -> Any:
+#     """Return the matrix matrix_1 * matrix_2 where * represents matrix multiplication.
+#     More efficient than matrix_multiplication_small.
 
-    Preconditions:
-      - len(matrix_1[0]) == len(matrix_2)
+#     Preconditions:
+#       - len(matrix_1[0]) == len(matrix_2)
 
-    >>> mat_1 = [[1], [1]]
-    >>> mat_2 = [[1, 1]]
-    >>> matrix_multiplication_dot(mat_1, mat_2)
-    [[1.0, 1.0], [1.0, 1.0]]
-    """
-    num_rows_1 = len(matrix_1)
-    num_col_2 = len(matrix_2[0])
+#     >>> mat_1 = [[1], [1]]
+#     >>> mat_2 = [[1, 1]]
+#     >>> matrix_multiplication_dot(mat_1, mat_2)
+#     [[1.0, 1.0], [1.0, 1.0]]
+#     """
+#     num_rows_1 = len(matrix_1)
+#     num_col_2 = len(matrix_2[0])
 
-    multiple = np.zeros(shape=(num_rows_1, num_col_2))
-    for i in range(num_rows_1):
-        multiple[i] = np.dot(matrix_1[i], matrix_2)
+#     multiple = np.zeros(shape=(num_rows_1, num_col_2))
+#     for i in range(num_rows_1):
+#         multiple[i] = np.dot(matrix_1[i], matrix_2)
 
-    return multiple.tolist()
+#     return multiple.tolist()
 
 
 if __name__ == '__main__':
