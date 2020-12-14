@@ -3,28 +3,31 @@ This file is for the final project in CSC110 at the University of Toronto St. Ge
 campus. For more information, please consult the course syllabus.
 """
 
-from typing import Dict, List
-from getdata import Climate
+from typing import Dict, List, Any
 from polyreg_v2_matrices import PolynomialRegression
 
 
-def get_output_data(climates: List[Climate], poly: PolynomialRegression) -> Dict[str, List[float]]:
+def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, List[Any]]:
     """Convert the calculated data structure into one that is easier to work with
     """
     output_data = {
         'year': list(range(1986, 2019)),
         'slope': poly.get_instantaneous_slopes(),
-        'co2': [0] * (2018 - 1985),
-        'forest area': [0] * (2018 - 1985),
         'error': poly.error_values,
         'r2': [poly.find_r_squared]
     }
 
-    for climate in climates:
-        if climate.name == 'Annual CO2 emissions of Brazil':
-            output_data['co2'][climate.year - 1986] = climate.value
-        elif climate.name == 'Estimated Natural Forest Cover':
-            output_data['forest area'][climate.year - 1986] = climate.value
+    if poly.x_var == 'Annual CO2 emissions of Brazil':
+        output_data['CO2'] = poly.x_values
+        output_data['precipitation'] = poly.y_values
+    elif poly.y_var == 'Annual CO2 emissions of Brazil':
+        output_data['tree area'] = poly.x_values
+        output_data['CO2'] = poly.y_values
+    else:
+        output_data['tree area'] = poly.x_values
+        output_data['precipitation'] = poly.y_values
+
+    output_data['year'] = years
 
     return output_data
 

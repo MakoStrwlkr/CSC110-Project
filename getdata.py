@@ -6,7 +6,7 @@ import os
 from typing import Any, List, Tuple
 
 import numpy as np
-from pyhdf.SD import SD, SDC
+# from pyhdf.SD import SD, SDC
 
 
 class Climate:
