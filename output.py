@@ -7,7 +7,7 @@ This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhur
 
 import math
 import random
-from typing import Set, Dict, List, Tuple, Any
+from typing import Set, Dict, List, Tuple
 from polynomial import PolynomialRegression
 
 
@@ -139,7 +139,7 @@ def prompt_dependent(independent: str) -> str:
     return 'Amazon Precipitation'
 
 
-def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, List[Any]]:
+def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, List[float]]:
     """Convert the calculated data structure into one that is easier to work with
     """
     output_data = {
