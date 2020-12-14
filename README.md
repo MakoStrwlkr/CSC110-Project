@@ -5,6 +5,8 @@
 <https://www.overleaf.com/5993241719dmhkqsdptfzf>
 
 To-do-list:
+Copyright
+
 - [x] part 1
 - [x] part 2
 - [x] part 3
