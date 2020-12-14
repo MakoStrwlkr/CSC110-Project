@@ -80,10 +80,7 @@ class PolynomialRegression(PolynomialAbstract):
       - y_values: the list of values for the dependent (Y) variable
       - x_var: the name of the independent (X) variable
       - y_var: the name of the dependent (Y) variable
-      - error_values: the list of error values obtained from the difference of the
-                      a y-value and the polynomial model evaluated at the corresponding
-                      x-value
-      - r_squared: the coefficient of determination for the polynomial model generated
+      - degree: the degree of the polynomial
 
     Representation invariants:
       - self.coefficients != []
@@ -91,9 +88,6 @@ class PolynomialRegression(PolynomialAbstract):
       - self.y_values != []
       - len(self.x_values) = len(self.y_values)
       - len(self.coefficients) <= len(self.x_values)
-      - len(self.error_values) = len(self.x_values)
-      - 0 <= self.r_squared <= 1
-
     """
     degree: int
     coefficients: List[float]
@@ -101,10 +95,11 @@ class PolynomialRegression(PolynomialAbstract):
     y_values: List[float]
     x_var: str
     y_var: str
-    _max_var_list: Dict[str, float]
+
     # Private Instance Attributes:
-    #   - _x_max: maximum of x-values
-    #   - _y_max: maximum of y-values
+    #   - _max_var_list: a dictionary mapping 'x' to the maximum x-value, and
+    #                    'y' to the maximum y-value
+    _max_var_list: Dict[str, float]
 
     def __init__(self, x_dict: Dict[str, List[float]], y_dict: Dict[str, List[float]],
                  degree: int, precision: int) -> None:
@@ -122,6 +117,7 @@ class PolynomialRegression(PolynomialAbstract):
           - 0 <= precision
           - len(x_dict) == 1
           - len(y_dict) == 1
+          - degree > 0
         """
 
         # initialize the x-var and y-var for the regression model
@@ -162,7 +158,7 @@ class PolynomialRegression(PolynomialAbstract):
         """A method to call the polynomial. This makes it easier to evaluate the
         polynomial function at any value.
 
-        >>> polynomial = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 5)
+        >>> polynomial = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 2, 5)
         >>> math.isclose(polynomial(4), 16.0)
         True
         """
@@ -270,7 +266,7 @@ class PolynomialRegression(PolynomialAbstract):
 
         Returns the derivative of the polynomial.
 
-        >>> polynomial = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 5)
+        >>> polynomial = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 2, 5)
         >>> diff = polynomial.differentiate()
         >>> diff.coefficients == [0, 2]
         True
@@ -285,7 +281,7 @@ class PolynomialRegression(PolynomialAbstract):
     def get_instantaneous_slopes(self) -> List[float]:
         """Get the instantaneous slope of the regression line at each x value
 
-        >>> poly = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 5)
+        >>> poly = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 2, 5)
         >>> poly.get_instantaneous_slopes()
         [2.0, 4.0, 6.0]
         """
