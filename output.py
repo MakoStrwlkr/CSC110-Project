@@ -8,7 +8,7 @@ This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhur
 import math
 import random
 from typing import Set, Dict, List, Tuple
-from output.output_data import get_output_data
+from output_data import get_output_data
 from polynomial_regression import PolynomialRegression
 
 
