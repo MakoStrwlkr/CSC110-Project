@@ -27,6 +27,6 @@ if __name__ == '__main__':
     y_values = [data[dependent][year] for year in data[dependent] if year in data[independent]]
     years = [year for year in data[independent] if year in data[dependent]]
 
-    poly = PolynomialRegression({independent: x_values}, {dependent: y_values}, 10)
+    poly = PolynomialRegression({independent: x_values}, {dependent: y_values}, 3, 10)
 
     interactive_model(poly, years)

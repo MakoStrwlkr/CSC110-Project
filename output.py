@@ -143,6 +143,7 @@ def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, L
     """Convert the calculated data structure into one that is easier to work with
     """
     output_data = {
+        'year': years,
         'slope': poly.get_instantaneous_slopes(),
         'error': poly.find_error_values(),
         'r2': [poly.find_r_squared()]
@@ -158,8 +159,6 @@ def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, L
         output_data['tree area'] = poly.x_values
         output_data['precipitation'] = poly.y_values
 
-    output_data['year'] = years
-
     return output_data
 
 
@@ -169,7 +168,7 @@ if __name__ == '__main__':
         'extra-imports': ['math', 'random', 'output_data', 'get_data',
                           'polynomial', 'python_ta.contracts'],
         'allowed-io': ['prompt_y', 'prompt_x', 'interactive_model',
-                       'prompt_independent', 'prompt_dependent'],
+                       'prompt_independent', 'prompt_dependent', 'prompt_degree'],
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']
     })
