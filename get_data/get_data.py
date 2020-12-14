@@ -59,12 +59,25 @@ def precipitation_read_hdf(filepath: str,
     res = list()
 
     if leftup[0] == -50:
+<<<<<<< HEAD
         leftup = (leftup[0] + 0.01, leftup[1])
     if leftup[1] == 180:
         leftup = (leftup[0], -leftup[1])
     if rightbottom[0] == -50:
         rightbottom = (rightbottom[0] + 0.01, rightbottom[1])
     if rightbottom[1] == 180:
+=======
+        # leftup[0] += 0.01
+        leftup = (leftup[0] + 0.01, leftup[1])
+    if leftup[1] == 180:
+        # leftup[1] = -leftup[1]
+        leftup = (leftup[0], -leftup[1])
+    if rightbottom[0] == -50:
+        # rightbottom[0] += 0.01
+        rightbottom = (rightbottom[0] + 0.01, rightbottom[1])
+    if rightbottom[1] == 180:
+        # rightbottom[1] = -rightbottom[1]
+>>>>>>> 90059126f8be9c63ff38704cf958f2d30388fde8
         rightbottom = (rightbottom[0], -rightbottom[1])
 
     p1 = (int((-(leftup[0] - 50)) // 0.25), int((leftup[1] + 180) // 0.25))
