@@ -6,6 +6,7 @@
 \usepackage{fancyhdr, accents}
 \usepackage{natbib}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 \pagestyle{fancy}
 \setlength{\headheight}{40pt}
@@ -102,7 +103,8 @@ PROCESSING INPUT DATA
 
 In the input part, we first start the deserialization by creating a class called \texttt{Climate} with public attribute \texttt{name}, \texttt{year} and \texttt{value} to maintain the entire input data section can be saved in the same format for later analysing with data from different types (e.g. HDF and CSV).
 
-In our own method \texttt{precipitation\_read\_hdf}, we first processed the input selected latitude and longitude of the top left endpoint and bottom right endpoint of the rectangular region in the global map. Since the NASA data is stored as longitude and latitude every 0.25 degrees. The longitude is recorded as 1440 points, while the latitude NASA only stores from 50 degrees north to 50 degrees south i.e. 400 points\citep{N3B43}. We used the knowledge of linear algebra to change the basis and represent the input endpoint latitudes and longitudes with the new basis. Then we import \texttt{os} library to visit all the HDF file in the folder path by method \texttt{os.listdir} to get a list of all HDF file name\citep{PytOS}. To read HDF file, we import a new library called \texttt{pyhdf}. This library helps to get access to the precipitation dataset from NASA since NASA use HDF to save all the satellite data. We mainly use \texttt{SD} and \texttt{SDC} class in \texttt{pyhdf.SD} module since \texttt{SD} helps to open a HDF file and return SD Instance and \texttt{SDC} is used to call \texttt{SDC.READ} method to use \textbf{read only mode} with HDF file\citep{Pyhdf}. We also use \texttt{numpy} library to deal with array transpose with imported dataset \citep{Pynpy}.
+In our own method \texttt{precipitation\_read\_hdf}, we first processed the input selected latitude and longitude of the top left endpoint and bottom right endpoint of the rectangular region in the global map. Since the NASA data is stored as longitude and latitude every 0.25 degrees. The longitude is recorded as 1440 points, while the latitude NASA only stores from 50 degrees north to 50 degrees south i.e. 400 points\citep{N3B43}. We used the knowledge of linear algebra to change the basis and represent the input endpoint latitudes and longitudes with the new basis. 
+Then we import \texttt{os} library to visit all the HDF file in the folder path by method \texttt{os.listdir} to get a list of all HDF file name\citep{PytOS}. To read HDF file, we import a new library called \texttt{pyhdf}. This library helps to get access to the precipitation dataset from NASA since NASA use HDF to save all the satellite data. We mainly use \texttt{SD} and \texttt{SDC} class in \texttt{pyhdf.SD} module since \texttt{SD} helps to open a HDF file and return SD Instance and \texttt{SDC} is used to call \texttt{SDC.READ} method to use \textbf{read only mode} with HDF file\citep{Pyhdf}. We also use \texttt{numpy} library to deal with array transpose with imported dataset \citep{Pynpy}.
 
 In our own function \texttt{precipitation\_read\_csv} and \texttt{deforestation\_read\_csv}, we only import \texttt{csv}, we use \texttt{DictReader} to get the header of the CSV file\citep{Pycsv}. Then the corresponding value in the CSV will be read through \texttt{for loop} and in each loop iteration create a \texttt{Climate} instance and stored in a list.
 
