@@ -8,7 +8,7 @@ This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhur
 import math
 import random
 from typing import Set, Dict, List, Tuple, Any
-from polynomial_regression import PolynomialRegression
+from polynomial import PolynomialRegression
 
 
 def interactive_model(poly: PolynomialRegression, years: List[int]) -> None:
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     import python_ta
     python_ta.check_all(config={
         'extra-imports': ['math', 'random', 'output_data', 'get_data',
-                          'polynomial_regression', 'python_ta.contracts'],
+                          'polynomial', 'python_ta.contracts'],
         'allowed-io': ['prompt_y', 'prompt_x', 'interactive_model',
                        'prompt_independent', 'prompt_dependent'],
         'max-line-length': 100,
