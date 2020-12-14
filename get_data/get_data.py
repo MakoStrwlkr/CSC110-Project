@@ -61,13 +61,17 @@ def precipitation_read_hdf(filepath: str,
     # lat2 = rightbottom[0]
     # lon2 = rightbottom[1]
     if leftup[0] == -50:
-        leftup[0] += 0.01
+        # leftup[0] += 0.01
+        leftup = (leftup[0] + 0.01, leftup[1])
     if leftup[1] == 180:
-        leftup[1] = -leftup[1]
+        # leftup[1] = -leftup[1]
+        leftup = (leftup[0], -leftup[1])
     if rightbottom[0] == -50:
-        rightbottom[0] += 0.01
+        # rightbottom[0] += 0.01
+        rightbottom = (rightbottom[0] + 0.01, rightbottom[1])
     if rightbottom[1] == 180:
-        rightbottom[1] = -rightbottom[1]
+        # rightbottom[1] = -rightbottom[1]
+        rightbottom = (rightbottom[0], -rightbottom[1])
 
     # x1 = int((-(leftup[0] - 50)) // 0.25)
     # y1 = int((leftup[1] + 180) // 0.25)
