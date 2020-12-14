@@ -66,26 +66,30 @@ def precipitation_read_hdf(filepath: str,
         rightbottom = (rightbottom[0] + 0.01, rightbottom[1])
     if rightbottom[1] == 180:
         rightbottom = (rightbottom[0], -rightbottom[1])
-
+    # Change basis from latitude and longitude into grid 0.25°*0.25°.
     p1 = (int((-(leftup[0] - 50)) // 0.25), int((leftup[1] + 180) // 0.25))
     p2 = (int((-(rightbottom[0] - 50)) // 0.25), int((rightbottom[1] + 180) // 0.25))
-
+    # Read given folder path to get directory of folder path.
     path_dir = os.listdir(filepath)
     stored_data = {}
+    # Deal with with each hdf filepath.
     for s in path_dir:
         new_dir = os.path.join(filepath, s)
         year = os.path.splitext(new_dir)[0].split('.')[1][0:4]
+        # Judge file type (pdf/hdf)
+        # Create dict key if not in stored_data
         if os.path.splitext(new_dir)[1].lower() == ".hdf" and year not in stored_data:
             stored_data[year] = 0.0
             stored_data[year] += process_hdf_data(new_dir, p1, p2)
         elif os.path.splitext(new_dir)[1].lower() == ".hdf":
             process_hdf_data(new_dir, p1, p2)
             stored_data[year] += process_hdf_data(new_dir, p1, p2)
-
+    # Calculate mm/hr by using sum(mm * num_points * 12 month)/hr
+    # divided by (number of points in range * 12 month)
     for year in stored_data:
         res.append(Climate('Amazon Precipitation', int(year),
                            stored_data[year] / 12 / (p2[0] - p1[0] + 1) / (p2[1] - p1[1] + 1)))
-
+    # Sort the returned list in increasing order of year
     res.sort()
     return res
 
