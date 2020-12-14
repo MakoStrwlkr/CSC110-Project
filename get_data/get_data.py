@@ -145,14 +145,14 @@ def getdata() -> List:
     res = list()
 
     # get CO2 data
-    res.extend(co2_read_csv('annual-co-emissions-by-region/annual-co-emissions-by-region.csv',
+    res.extend(co2_read_csv('data/annual-co-emissions-by-region.csv',
                             'Brazil'))
 
     # get deforestation data
-    res.extend(deforestation_read_csv('deforestation.csv', 'Estimated Natural Forest Cover'))
+    res.extend(deforestation_read_csv('data/deforestation.csv', 'Estimated Natural Forest Cover'))
 
     # get precipitation data
-    res.extend(precipitation_read_hdf('3B43_rainfall', (0.553222, -65.162917),
+    res.extend(precipitation_read_hdf('data/3B43_rainfall', (0.553222, -65.162917),
                                       (-4.070444, -52.109639)))
 
     return res
@@ -184,8 +184,8 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 
 if __name__ == '__main__':
-    save_data_as_csv(getdata(), "dataset.csv")
-    # read_data_from_csv("dataset.csv")
+    save_data_as_csv(getdata(), "data/dataset.csv")
+    # read_data_from_csv("data/dataset.csv")
 
     import doctest
 

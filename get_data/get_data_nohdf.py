@@ -50,7 +50,7 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 if __name__ == '__main__':
     # sample usage
-    dataset = read_data_from_csv("../data/dataset.csv")
+    dataset = read_data_from_csv("./data/dataset.csv")
 
     import doctest
     doctest.testmod(verbose=True)
