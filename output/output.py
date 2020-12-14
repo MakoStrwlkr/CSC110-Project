@@ -1,18 +1,21 @@
 """
 This file is for the final project in CSC110 at the University of Toronto St. George
 campus. For more information, please consult the course syllabus.
+
+This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
 
 import math
 import random
 from typing import Set, Dict, List, Tuple
 from output_data import get_output_data
-from polyreg_v2_matrices import PolynomialRegression
+from polynomial_regression import PolynomialRegression
 
 
 def interactive_model(poly: PolynomialRegression, years) -> None:
     """Run the interactive model for the data
     """
+    poly.plotter()
     data = get_output_data(poly, years)
     valid_dependent = {key for key in data.keys()}
 
@@ -23,16 +26,16 @@ def interactive_model(poly: PolynomialRegression, years) -> None:
     while True:
         y = prompt_y(valid_dependent)
         valid_independent = valid_dependent.copy()
-        valid_independent.remove(y)
-        valid_independent.remove('r2')
         if y == 'r2':
             r2 = data['r2'][0]
             print(f'The r\u00b2 of the polynomial regression is { r2 }')
         else:
+            valid_independent.remove(y)
+            valid_independent.remove('r2')
             x, expected = prompt_x(valid_independent, y)
             values = get_dependent(data, x, y, expected)
             if values == []:
-                print(f'{ x } is never { expected }')
+                print(f'{ x } is never close to { expected }')
             else:
                 print(f'{ x } = { expected } when { y } is')
                 print('\n'.join(str(value) for value in values))
@@ -97,7 +100,10 @@ def get_dependent(data: Dict[str, List[float]], x: str, y: str, expected: float)
 
 def prompt_independent() -> str:
     """Prompt the user for the independent variable to ue for calculation
-    # TODO: ADD DOCTEST
+
+    >>> prompt_independent()
+
+
     """
     independent = input('Would you like to use CO2 or forest cover as the independent variable?')
     while independent not in {'forest cover', 'CO2'}:
@@ -111,7 +117,8 @@ def prompt_independent() -> str:
 
 def prompt_dependent(independent: str) -> str:
     """Prompt the user for the dependent variable to use for calculation
-    # TODO: ADD DOCTEST
+
+    >>> prompt_dependent()
     """
     if independent == 'Estimated Natural Forest Cover':
         dependent = input('Would you like to calculate for CO2 or precipitation')
@@ -126,8 +133,8 @@ def prompt_dependent(independent: str) -> str:
 if __name__ == '__main__':
     import python_ta
     python_ta.check_all(config={
-        'extra-imports': ['math', 'random', 'output_data', 'getdata',
-                          'polyreg_v2_matrices', 'python_ta.contracts'],
+        'extra-imports': ['math', 'random', 'output_data', 'get_data',
+                          'polynomial_regression', 'python_ta.contracts'],
         'allowed-io': ['prompt_y', 'prompt_x', 'interactive_model'],
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']

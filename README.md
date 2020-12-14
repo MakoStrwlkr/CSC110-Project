@@ -5,4 +5,4 @@ To-do-list:
 - [x] CO2 data
 - [x] Deforestation data
 - [x] data analyze
-- [ ] interactive report
+- [x] interactive report

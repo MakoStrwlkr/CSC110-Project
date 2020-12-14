@@ -1,5 +1,8 @@
-""" CSC110 Course Project - Read Data and Store with Defined Type
+"""
+This file is for the final project in CSC110 at the University of Toronto St. George
+campus. For more information, please consult the course syllabus.
 
+This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
 import csv
 from typing import Any, List
@@ -47,19 +50,17 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 if __name__ == '__main__':
     # sample usage
-    dataset = read_data_from_csv("dataset.csv")
+    dataset = read_data_from_csv("../data/dataset.csv")
 
     import doctest
-
     doctest.testmod(verbose=True)
 
     import python_ta
-
     python_ta.check_all(config={
         'extra-imports': ['numpy', 'matplotlib.pyplot', 'typing', 'math',
                           "pyhdf.SD", "pyhdf.SDC", "csv", "os"],
         'allowed-io': ["read_data_from_csv", "save_data_as_csv",
-                       "deforestation_read_csv", "co2_read_csv"],  # the names (strs) of functions that call print/open/input
+                       "deforestation_read_csv", "co2_read_csv"],
         'max-line-length': 150,
         'disable': ['R1705', 'C0200'],
         'max-nested-blocks': 5

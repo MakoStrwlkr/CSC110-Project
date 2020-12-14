@@ -1,20 +1,21 @@
 """
 This file is for the final project in CSC110 at the University of Toronto St. George
 campus. For more information, please consult the course syllabus.
+
+This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
 
 from typing import Dict, List, Any
-from polyreg_v2_matrices import PolynomialRegression
+from polynomial_regression import PolynomialRegression
 
 
 def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, List[Any]]:
     """Convert the calculated data structure into one that is easier to work with
     """
     output_data = {
-        'year': list(range(1986, 2019)),
         'slope': poly.get_instantaneous_slopes(),
         'error': poly.error_values,
-        'r2': [poly.find_r_squared]
+        'r2': [poly.find_r_squared()]
     }
 
     if poly.x_var == 'Annual CO2 emissions of Brazil':
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     import python_ta
 
     python_ta.check_all(config={
-        'extra-imports': ['typing', 'getdata', 'polyreg_v2_matrices', 'python_ta.contracts'],
+        'extra-imports': ['typing', 'get_data', 'polyreg_v2_matrices', 'python_ta.contracts'],
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']
     })

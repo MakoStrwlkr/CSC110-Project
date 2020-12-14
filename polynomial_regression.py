@@ -20,27 +20,6 @@ import matplotlib.pyplot as plt
 
 
 ############################################################################################
-# Input function
-# takes in a list of co-ordinates and splits them up.
-############################################################################################
-
-
-# I changed the way the PolynomialRegression class initializes values so we didn't use this.
-#
-# def split_coordinates(coordinates: List[Tuple[float, float]]) -> Tuple[List[float], List[float]]:
-#     """Return a tuple of the x-values and y-values.
-#
-#     Preconditions:
-#       - coordinates != []
-#
-#     >>> split_coordinates([(1, 1), (2, 4), (3, 9)])
-#     ([1, 2, 3], [1, 4, 9])
-#     """
-#     points = sorted(coordinates)
-#     return ([x[0] for x in points], [y[1] for y in points])
-
-
-############################################################################################
 # Functions for matrices
 ############################################################################################
 
@@ -59,37 +38,6 @@ def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
     transpose = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
 
     return transpose
-
-
-############################################################################################
-# Initially, I had planned on using numpy's matrix multiplication function, which is much more
-# efficient than the naive approach I used.
-# Although I know how to make this implementation faster using vectorization approach from the
-# module tensorflow, the exact algorithm used is beyond the scope of the course or any other math
-# courses I have taken, and as such, I was not fully convinced of its correctness, and so, did not
-# use it.
-# For the purposes of this project, a Theta(m * n * k) algorithm is sufficient, where matrix_1 has
-# dimension m * n, and matrix_2 had dimension n * k; this is because, in polynomial regression,
-# we usually don't take high-order polynomials.
-############################################################################################
-
-# def matrix_multiplication_numpy(matrix_1: List[List[float]], matrix_2: List[List[float]]) \
-#         -> List[List[float]]:
-#     """Return the matrix matrix_1 * matrix_2, where * represents matrix multiplication.
-#     Most efficient algorithm for matrix multiplication.
-#
-#     Preconditions:
-#       - len(matrix_1[0]) == len(matrix_2)
-#
-#     >>> mat_1 = [[1], [1]]
-#     >>> mat_2 = [[1, 1]]
-#     >>> matrix_multiplication_numpy(mat_1, mat_2)
-#     [[1, 1], [1, 1]]
-#     """
-#     m1 = np.array(matrix_1)
-#     m2 = np.array(matrix_2)
-#     multiple = np.matmul(m1, m2)
-#     return multiple.tolist()
 
 
 def matrix_multiplication_small(matrix_1: List[List[float]], matrix_2: List[List[float]])\
@@ -168,58 +116,8 @@ def find_coefficients(x_data: List[float], y_data: List[float], degree: int) -> 
 
     beta = matrix_multiplication_small(inv_multiply_with_transpose, y_matrix)
 
-    # The following lines were commented out after I changed the function implementation.
-    # Originally, this function would return a tuple of lists: one with the coefficients,
-    # and the other with the absolute random errors at each point.
-    # but I changed my code to do that in the PolynomialRegression class.
-    # Thus, this was rendered obsolete.
-    # If you wish to see how this worked, first change the return type of this function
-    # to tuple, and then, in PolynomialRegression class, change the code appropriately.
-    # Both versions work, but the current one is more readable.
-    # mult_beta_x = matrix_multiplication_small(x_matrix, beta)
-    #
-    # epsilon = [y_matrix[i][0] - mult_beta_x[i][0] for i in range(len(y_matrix))]
-
     return beta
 
-
-############################################################################################
-# Originally, I had planned on using a custom class Matrix represent the matrices used in this
-# file, but I decided that using List[List[float]] type annotations were a better way of
-# representing the different shapes of matrices used (column matrix, rectangular matrix, and
-# square matrix).
-# Or else, I could have used the numpy array data class, but that required me to repeatedly call
-# the tolist() function in my own functions, so I did not choose that.
-############################################################################################
-
-# class Matrix:
-#     """An abstract data class for a nested list representation of a matrix.
-#     All subclasses support matrix transpose, matrix inverse, matrix multiplication.
-#
-#     """
-#
-#     ...
-#
-#
-# class XMatrix(Matrix):
-#     """Matrix for storing the powers of x.
-#
-#     Public instance attributes:
-#       - matrix: nested list representation of a matrix
-#     """
-#     matrix: List[List[float]]
-#
-#     def __init__(self, points: List[float], degree: int) -> None:
-#         """Returns a nested list representation of a matrix consisting of the basis
-#         elements of the polynomial of degree n, evaluated at each of the points.
-#
-#         In other words, each row consists of 1, x, x^2, ..., x^n, where n is the degree,
-#         and x is a value in points.
-#
-#         Preconditions:
-#           - degree < len(points)
-#         """
-#         self.matrix = make_matrix(points, degree)
 
 ############################################################################################
 # This function is used to make the matrix X in the matrix equation specified above.
@@ -387,7 +285,7 @@ class PolynomialRegression(PolynomialAbstract):
         """A method to call the polynomial. This makes it easier to evaluate the
         polynomial function at any value.
 
-        >>> polynomial = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 2, 5)
+        >>> polynomial = PolynomialRegression({'year': [1, 2, 3]}, {'precip': [1, 4, 9]}, 5)
         >>> math.isclose(polynomial(4), 16.0)
         True
         """
@@ -551,7 +449,6 @@ if __name__ == '__main__':
 
     python_ta.check_all(config={
         'extra-imports': ['numpy', 'matplotlib.pyplot', 'typing', 'math'],
-        'allowed-io': [],  # the names (strs) of functions that call print/open/input
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']
     })

@@ -1,5 +1,8 @@
-""" CSC110 Course Project - Read Data and Store with Defined Type
+"""
+This file is for the final project in CSC110 at the University of Toronto St. George
+campus. For more information, please consult the course syllabus.
 
+This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
 import csv
 import os
@@ -39,9 +42,10 @@ class Climate:
 def precipitation_read_hdf(filepath: str,
                            leftup: Tuple[float, float],
                            rightbottom: Tuple[float, float]) -> List[Climate]:
-    """Read precipitation data from given hdf file. And select a rectangle area by given leftup and rightbottom.
-    Add the given location(Tuple) responding grid by 0.25°*0.25° in scope of responding grid by 0.25°*0.25°
-    in scope of 50°S to 50°N and 180°W – 180°E. S is negative and W correspond to negative value.
+    """Read precipitation data from given hdf file. And select a rectangle area
+    by given leftup and rightbottom. Add the given location(Tuple) responding grid
+    by 0.25°*0.25° in scope of responding grid by 0.25°*0.25° in scope of 50°S to
+    50°N and 180°W – 180°E. S is negative and W correspond to negative value.
 
         Representation Invariants:
             - -50 <= leftup[0] <= 50
@@ -94,7 +98,8 @@ def precipitation_read_hdf(filepath: str,
                     sum_so_far += temp[i][j]
             stored_data[year] += sum_so_far
     for year in stored_data:
-        res.append(Climate('Amazon Precipitation', int(year), stored_data[year] / 12 / (P2[0] - P1[0] + 1) / (P2[1] - P1[1] + 1)))
+        res.append(Climate('Amazon Precipitation', int(year),
+                           stored_data[year] / 12 / (P2[0] - P1[0] + 1) / (P2[1] - P1[1] + 1)))
 
     res.sort()
     return res
@@ -132,33 +137,36 @@ def deforestation_read_csv(filepath: str, row_name: str) -> List[Climate]:
     with open(filepath, newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
         for row in reader:
-            climate = Climate(name=row_name, year=int(row["Period"]), value=float(row[row_name].replace(',', '')))
+            climate = Climate(name=row_name, year=int(row["Period"]),
+                              value=float(row[row_name].replace(',', '')))
             res.append(climate)
 
     res.sort()
     return res
 
 
-def getdata() -> List:
+def get_data() -> List:
     """use this function to fetch all the data needed.
     res is a list contains Climate class.
     """
     res = list()
 
     # get CO2 data
-    res.extend(co2_read_csv('annual-co-emissions-by-region/annual-co-emissions-by-region.csv', 'Brazil'))
+    res.extend(co2_read_csv('annual-co-emissions-by-region/annual-co-emissions-by-region.csv',
+                            'Brazil'))
 
     # get deforestation data
     res.extend(deforestation_read_csv('deforestation.csv', 'Estimated Natural Forest Cover'))
 
     # get precipitation data
-    res.extend(precipitation_read_hdf('3B43_rainfall', (0.553222, -65.162917), (-4.070444, -52.109639)))
+    res.extend(precipitation_read_hdf('3B43_rainfall',
+                                      (0.553222, -65.162917), (-4.070444, -52.109639)))
 
     return res
 
 
 def save_data_as_csv(data: list, filename: str) -> None:
-    """save the data from getdata() as csv.
+    """save the data from get_data() as csv.
     """
     with open(filename, 'w', newline='') as csvfile:
         fieldnames = ["name", "year", "value"]
@@ -183,7 +191,7 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 
 if __name__ == '__main__':
-    save_data_as_csv(getdata(), "dataset.csv")
+    save_data_as_csv(get_data(), "dataset.csv")
     # read_data_from_csv("dataset.csv")
 
     import doctest
@@ -196,8 +204,8 @@ if __name__ == '__main__':
         'extra-imports': ['numpy', 'matplotlib.pyplot', 'typing', 'math',
                           "pyhdf.SD", "pyhdf.SDC", "csv", "os"],
         'allowed-io': ["read_data_from_csv", "save_data_as_csv",
-                       "deforestation_read_csv", "co2_read_csv"],  # the names (strs) of functions that call print/open/input
-        'max-line-length': 150,
+                       "deforestation_read_csv", "co2_read_csv"],
+        'max-line-length': 100,
         'disable': ['R1705', 'C0200'],
         'max-nested-blocks': 5
     })
