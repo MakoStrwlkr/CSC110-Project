@@ -95,13 +95,16 @@ class PolynomialRegression(PolynomialAbstract):
       - 0 <= self.r_squared <= 1
 
     """
+    degree: int
     coefficients: List[float]
     x_values: List[float]
     y_values: List[float]
     x_var: str
     y_var: str
-    error_values: List[float]
-    r_squared: float
+    _max_var_list: Dict[str, float]
+    # Private Instance Attributes:
+    #   - _x_max: maximum of x-values
+    #   - _y_max: maximum of y-values
 
     def __init__(self, x_dict: Dict[str, List[float]], y_dict: Dict[str, List[float]],
                  precision: int) -> None:
@@ -125,24 +128,34 @@ class PolynomialRegression(PolynomialAbstract):
         self.x_var = list(x_dict)[0]
         self.y_var = list(y_dict)[0]
 
+        # initialize the x-max and y-max
+        x_max = max(x_dict[self.x_var])
+        y_max = max(y_dict[self.y_var])
+
+        self._max_var_list = {}
+        self._max_var_list.update({'x': x_max, 'y': y_max})
+
         # initialize the x- and y-values in the regression model
         self.x_values = x_dict[self.x_var]
         self.y_values = y_dict[self.y_var]
 
+        # create the lists to determine the relative polynomial model
+        x_list = [x / x_max for x in self.x_values]
+        y_list = [y / y_max for y in self.y_values]
+
         # find the coefficient matrix (column matrix) for the input data
-        beta = find_coefficients(self.x_values, self.y_values, 2)
+        beta = find_coefficients(x_list, y_list, 2)
 
         # to avoid floating point error, round it to specified number of decimals
         coefficients = [round(b[0], precision) for b in beta]
 
         self.coefficients = coefficients
 
-        self.error_values = [round(self.y_values[i] - self(self.x_values[i]), precision)
-                             for i in range(len(self.x_values))]
-        self.r_squared = round(self.find_r_squared(), precision)
-
-        mean_error = expected_value(self.error_values)
-
+        # account for random errors, and adjust
+        # even though in the OLS method, we assume that E[error] = 0,
+        # it's better to account for such errors as well.
+        errors = self.find_error_values()
+        mean_error = expected_value(errors)
         self.coefficients[0] += mean_error
 
     def __call__(self, value: Any) -> float:
@@ -159,8 +172,8 @@ class PolynomialRegression(PolynomialAbstract):
 
         evaluation = 0
         for index, coefficient in enumerate(self.coefficients):
-            evaluation += coefficient * value ** index
-        return evaluation
+            evaluation += coefficient * (value / self._max_var_list['x']) ** index
+        return evaluation * self._max_var_list['y']
 
     def plotter(self) -> None:
         """Plot a simple graph of the polynomial, as well as a scatter graph
@@ -170,6 +183,7 @@ class PolynomialRegression(PolynomialAbstract):
 
         x = np.linspace(0.5 * min(self.x_values), 1.25 * max(self.x_values),
                         100, endpoint=True)
+
         f = self(x)
         plt.plot(x, f, color='green')
 
@@ -201,7 +215,7 @@ class PolynomialRegression(PolynomialAbstract):
         Preconditions:
           - self.coefficients != []
         """
-        absolute_errors = [abs(error) for error in self.error_values]
+        absolute_errors = [abs(error) for error in self.find_error_values()]
         return {'min absolute error': min(absolute_errors),
                 'max absolute error': max(absolute_errors)}
 
@@ -214,6 +228,14 @@ class PolynomialRegression(PolynomialAbstract):
                            for i in range(len(self.x_values)))
 
         return 1 - (residual_sum / total_sum)
+
+    def find_error_values(self) -> List[float]:
+        """Return a list of error values obtained from the difference of the
+        y-value and the polynomial model evaluated at the corresponding x-value
+        """
+        error_list = [self.y_values[i] - self(self.x_values[i])
+                      for i in range(len(self.x_values))]
+        return error_list
 
     def covariance_with_polynomial(self) -> float:
         """Return the covariance of the y_values in the data, and the polynomial model.
@@ -272,8 +294,12 @@ class PolynomialRegression(PolynomialAbstract):
         coefficients = derivative.coefficients
         for x in self.x_values:
             slope = 0
+
             for i in range(len(coefficients)):
-                slope += coefficients[i] * x ** i
+                slope += coefficients[i] * (x / self._max_var_list['x']) ** i
+
+            slope *= self._max_var_list['y'] / self._max_var_list['x']
+
             slopes.append(slope)
 
         return slopes
