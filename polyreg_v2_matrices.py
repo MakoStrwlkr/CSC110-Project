@@ -421,10 +421,10 @@ class PolynomialRegression(PolynomialAbstract):
 
         cbar = plt.colorbar()
         cbar.set_label(self.y_var)
-        
+
         plt.xlabel(self.x_var)
         plt.ylabel(self.y_var)
-        
+
         plt.tight_layout()
 
         plt.show()
@@ -545,7 +545,7 @@ if __name__ == '__main__':
     doctest.testmod(verbose=True)
 
     import python_ta
-    
+
     python_ta.check_all(config={
         'extra-imports': ['numpy', 'matplotlib.pyplot', 'typing', 'math'],
         'allowed-io': [],  # the names (strs) of functions that call print/open/input
