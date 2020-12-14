@@ -6,7 +6,7 @@ This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhur
 """
 
 from get_data_nohdf import read_data_from_csv
-from polynomial_regression import PolynomialRegression
+from polynomial import PolynomialRegression
 from output import interactive_model, prompt_independent, prompt_dependent
 
 if __name__ == '__main__':
