@@ -144,7 +144,7 @@ def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, L
     """
     output_data = {
         'slope': poly.get_instantaneous_slopes(),
-        'error': poly.error_values,
+        'error': poly.find_error_values(),
         'r2': [poly.find_r_squared()]
     }
 
