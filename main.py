@@ -5,9 +5,9 @@ campus. For more information, please consult the course syllabus.
 This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
 
-from get_data.get_data_nohdf import read_data_from_csv
+from get_data_nohdf import read_data_from_csv
 from polynomial_regression import PolynomialRegression
-from output.output import interactive_model, prompt_independent, prompt_dependent
+from output import interactive_model, prompt_independent, prompt_dependent
 
 if __name__ == '__main__':
     data = {
