@@ -75,28 +75,33 @@ def precipitation_read_hdf(filepath: str,
     for s in path_dir:
         new_dir = os.path.join(filepath, s)
         year = os.path.splitext(new_dir)[0].split('.')[1][0:4]
-        if os.path.splitext(new_dir)[1].lower() == ".hdf" \
-                and year not in stored_data:
-            temp = np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])
-            sum_so_far = 0.0
-            for i in range(p1[0], p2[0] + 1):
-                for j in range(p1[1], p2[1] + 1):
-                    sum_so_far += temp[i][j]
-            stored_data[year] = sum_so_far
-
+        if os.path.splitext(new_dir)[1].lower() == ".hdf" and year not in stored_data:
+            stored_data[year] = 0.0
+            stored_data[year] += process_hdf_data(new_dir, p1, p2)
         elif os.path.splitext(new_dir)[1].lower() == ".hdf":
-            temp = np.transpose(SD(new_dir, SDC.READ).select('precipitation')[:])
-            sum_so_far = 0.0
-            for i in range(p1[0], p2[0] + 1):
-                for j in range(p1[1], p2[1] + 1):
-                    sum_so_far += temp[i][j]
-            stored_data[year] += sum_so_far
+            process_hdf_data(new_dir, p1, p2)
+            stored_data[year] += process_hdf_data(new_dir, p1, p2)
+
     for year in stored_data:
         res.append(Climate('Amazon Precipitation', int(year),
                            stored_data[year] / 12 / (p2[0] - p1[0] + 1) / (p2[1] - p1[1] + 1)))
 
     res.sort()
     return res
+
+
+def process_hdf_data(filepath: str, p1: Tuple[int, int], p2: Tuple[int, int]) -> float:
+    """A helper function of precipitation_read_hdf to calculate the sum of all
+    precipitation of provided p1(position1) and p2(position2).
+    """
+    temp = np.transpose(SD(filepath, SDC.READ).select('precipitation')[:])
+    sum_so_far = 0.0
+
+    for i in range(p1[0], p2[0] + 1):
+        for j in range(p1[1], p2[1] + 1):
+            sum_so_far += temp[i][j]
+
+    return sum_so_far
 
 
 def co2_read_csv(filepath: str, country: str) -> Any:
