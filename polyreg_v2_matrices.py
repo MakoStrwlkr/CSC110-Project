@@ -379,6 +379,10 @@ class PolynomialRegression(PolynomialAbstract):
                              for i in range(len(self.x_values))]
         self.r_squared = round(self.find_r_squared(), precision)
 
+        mean_error = expected_value(self.error_values)
+
+        self.coefficients[0] += mean_error
+
     def __call__(self, value: Any) -> float:
         """A method to call the polynomial. This makes it easier to evaluate the
         polynomial function at any value.
