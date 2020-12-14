@@ -32,6 +32,9 @@ class Climate:
     def __str__(self) -> str:
         return str([self.name, self.year, self.value])
 
+    def __lt__(self, other) -> bool:
+        return self.year < other.year
+
 
 def precipitation_read_hdf(filepath: str,
                            leftup: Tuple[float, float],
@@ -93,6 +96,7 @@ def precipitation_read_hdf(filepath: str,
     for year in stored_data:
         res.append(Climate('Amazon Precipitation', int(year), stored_data[year] / 12 / (P2[0] - P1[0] + 1) / (P2[1] - P1[1] + 1)))
 
+    res.sort()
     return res
 
 
@@ -109,6 +113,7 @@ def co2_read_csv(filepath: str, country: str) -> Any:
                                   year=int(row["Year"]), value=float(row["Annual CO2 emissions"]))
                 res.append(climate)
 
+    res.sort()
     return res
 
 
@@ -130,6 +135,7 @@ def deforestation_read_csv(filepath: str, row_name: str) -> List[Climate]:
             climate = Climate(name=row_name, year=int(row["Period"]), value=float(row[row_name].replace(',', '')))
             res.append(climate)
 
+    res.sort()
     return res
 
 
@@ -177,7 +183,7 @@ def read_data_from_csv(filename: str) -> List[Climate]:
 
 
 if __name__ == '__main__':
-    # save_data_as_csv(getdata(), "dataset.csv")
+    save_data_as_csv(getdata(), "dataset.csv")
     # read_data_from_csv("dataset.csv")
 
     import doctest

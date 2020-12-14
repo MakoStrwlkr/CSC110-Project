@@ -30,6 +30,10 @@ class Climate:
     def __str__(self) -> str:
         return str([self.name, self.year, self.value])
 
+    def __lt__(self, other) -> bool:
+        return self.year < other.year
+
+
 def read_data_from_csv(filename: str) -> List[Climate]:
     """read the data from saved csv
     """
