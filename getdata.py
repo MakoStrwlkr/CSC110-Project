@@ -32,7 +32,7 @@ class Climate:
     def __str__(self) -> str:
         return str([self.name, self.year, self.value])
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: Any) -> bool:
         return self.year < other.year
 
 
