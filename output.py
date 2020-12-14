@@ -7,8 +7,7 @@ This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhur
 
 import math
 import random
-from typing import Set, Dict, List, Tuple
-from output_data import get_output_data
+from typing import Set, Dict, List, Tuple, Any
 from polynomial_regression import PolynomialRegression
 
 
@@ -138,6 +137,30 @@ def prompt_dependent(independent: str) -> str:
             return 'Annual CO2 emissions of Brazil'
 
     return 'Amazon Precipitation'
+
+
+def get_output_data(poly: PolynomialRegression, years: List[int]) -> Dict[str, List[Any]]:
+    """Convert the calculated data structure into one that is easier to work with
+    """
+    output_data = {
+        'slope': poly.get_instantaneous_slopes(),
+        'error': poly.error_values,
+        'r2': [poly.find_r_squared()]
+    }
+
+    if poly.x_var == 'Annual CO2 emissions of Brazil':
+        output_data['CO2'] = poly.x_values
+        output_data['precipitation'] = poly.y_values
+    elif poly.y_var == 'Annual CO2 emissions of Brazil':
+        output_data['tree area'] = poly.x_values
+        output_data['CO2'] = poly.y_values
+    else:
+        output_data['tree area'] = poly.x_values
+        output_data['precipitation'] = poly.y_values
+
+    output_data['year'] = years
+
+    return output_data
 
 
 if __name__ == '__main__':
