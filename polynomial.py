@@ -2,13 +2,7 @@
 Data Analysis using Polynomial regression implemented using matrices through
 the ordinary least squares estimator.
 
-Written by Arkaprava Choudhury,
-In partnership with Ching Chang, Letian Cheng, and Hanrui Fan.
-
-All work presented here written by Arkaprava Choudhury, et. al, and no piece of code has been
-referenced from any sources on the Internet. The authors reserve all rights to replicate this
-work, and no one, apart from the graders of this project and the instructors of CSC110 can
-modify / use this code as their own.
+Written by Arkaprava Choudhury, Ching Chang, Hanrui Fan, and Letian Cheng.
 
 This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhury, and Hanrui Fan.
 """
@@ -172,13 +166,13 @@ class PolynomialRegression(PolynomialAbstract):
         """Plot a simple graph of the polynomial, as well as a scatter graph
         of values in the two lists.
         """
+        plt.style.use('seaborn')
+        
         x = np.linspace(0.5 * min(self.x_values), 1.25 * max(self.x_values),
                         100, endpoint=True)
         f = self(x)
-        plt.plot(x, f)
-
-        plt.style.use('seaborn')
-
+        plt.plot(x, f, color='green')
+        
         max_val = max(self.y_values)
         min_val = min(self.y_values)
 
