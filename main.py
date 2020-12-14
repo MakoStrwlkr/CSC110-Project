@@ -9,24 +9,24 @@ from get_data.get_data_nohdf import read_data_from_csv
 from polynomial_regression import PolynomialRegression
 from output.output import interactive_model, prompt_independent, prompt_dependent
 
-climates = read_data_from_csv('data/dataset.csv')
+if __name__ == '__main__':
+    data = {
+        'Annual CO2 emissions of Brazil': {},
+        'Estimated Natural Forest Cover': {},
+        'Amazon Precipitation': {}
+    }
 
-data = {
-    'Annual CO2 emissions of Brazil': {},
-    'Estimated Natural Forest Cover': {},
-    'Amazon Precipitation': {}
-}
+    climates = read_data_from_csv('data/dataset.csv')
+    for climate in climates:
+        data[climate.name][climate.year] = climate.value
 
-for climate in climates:
-    data[climate.name][climate.year] = climate.value
+    independent = prompt_independent()
+    dependent = prompt_dependent(independent)
 
-independent = prompt_independent()
-dependent = prompt_dependent(independent)
+    x_values = [data[independent][year] for year in data[independent] if year in data[dependent]]
+    y_values = [data[dependent][year] for year in data[dependent] if year in data[independent]]
+    years = [year for year in data[independent] if year in data[dependent]]
 
-x_values = [data[independent][year] for year in data[independent] if year in data[dependent]]
-y_values = [data[dependent][year] for year in data[dependent] if year in data[independent]]
-years = [year for year in data[independent] if year in data[dependent]]
+    poly = PolynomialRegression({independent: x_values}, {dependent: y_values}, 10)
 
-poly = PolynomialRegression({independent: x_values}, {dependent: y_values}, 10)
-
-interactive_model(poly, years)
+    interactive_model(poly, years)

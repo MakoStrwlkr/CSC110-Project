@@ -8,16 +8,16 @@ This file is Copyright (c) 2020 by Ching Chang, Letian Cheng, Arkaprava Choudhur
 import math
 import random
 from typing import Set, Dict, List, Tuple
-from output_data import get_output_data
+from output.output_data import get_output_data
 from polynomial_regression import PolynomialRegression
 
 
-def interactive_model(poly: PolynomialRegression, years) -> None:
+def interactive_model(poly: PolynomialRegression, years: List[int]) -> None:
     """Run the interactive model for the data
     """
     poly.plotter()
     data = get_output_data(poly, years)
-    valid_dependent = {key for key in data.keys()}
+    valid_dependent = set(data)
 
     print('=====================================================================================')
     print('You can use this interactive model to look up the value of y at a certain x')
@@ -102,8 +102,11 @@ def prompt_independent() -> str:
     """Prompt the user for the independent variable to ue for calculation
 
     >>> prompt_independent()
-
-
+    Would you like to use CO2 or forest cover as the independent variable?
+    >? precipitation
+    Please enter 'CO2' or 'forest cover'
+    >? forest cover
+    'Estimated Natural Forest Cover'
     """
     independent = input('Would you like to use CO2 or forest cover as the independent variable?')
     while independent not in {'forest cover', 'CO2'}:
@@ -118,7 +121,14 @@ def prompt_independent() -> str:
 def prompt_dependent(independent: str) -> str:
     """Prompt the user for the dependent variable to use for calculation
 
-    >>> prompt_dependent()
+    >>> prompt_dependent('Annual CO2 emissions of Brazil')
+    'Amazon Precipitation'
+    >>> prompt_dependent('Estimated Natural Forest Cover')
+    Would you like to calculate for CO2 or precipitation
+    >? co2
+    Please enter 'CO2' or 'precipitation'
+    >? CO2
+    'Annual CO2 emissions of Brazil'
     """
     if independent == 'Estimated Natural Forest Cover':
         dependent = input('Would you like to calculate for CO2 or precipitation')
@@ -135,7 +145,8 @@ if __name__ == '__main__':
     python_ta.check_all(config={
         'extra-imports': ['math', 'random', 'output_data', 'get_data',
                           'polynomial_regression', 'python_ta.contracts'],
-        'allowed-io': ['prompt_y', 'prompt_x', 'interactive_model'],
+        'allowed-io': ['prompt_y', 'prompt_x', 'interactive_model',
+                       'prompt_independent', 'prompt_dependent'],
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']
     })

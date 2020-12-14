@@ -37,7 +37,7 @@ if __name__ == '__main__':
     import python_ta
 
     python_ta.check_all(config={
-        'extra-imports': ['typing', 'get_data', 'polyreg_v2_matrices', 'python_ta.contracts'],
+        'extra-imports': ['typing', 'get_data', 'polynomial_regression', 'python_ta.contracts'],
         'max-line-length': 100,
         'disable': ['R1705', 'C0200']
     })

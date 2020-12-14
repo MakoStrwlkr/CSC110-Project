@@ -345,9 +345,9 @@ class PolynomialRegression(PolynomialAbstract):
         """Return the coefficient of determination for the polynomial regression model
         """
         mean_y = expected_value(self.y_values)
-        total_sum = sum([(y - mean_y) ** 2 for y in self.y_values])
-        residual_sum = sum([(self.y_values[i] - self(self.x_values[i])) ** 2
-                            for i in range(len(self.x_values))])
+        total_sum = sum((y - mean_y) ** 2 for y in self.y_values)
+        residual_sum = sum((self.y_values[i] - self(self.x_values[i])) ** 2
+                           for i in range(len(self.x_values)))
 
         return 1 - (residual_sum / total_sum)
 
